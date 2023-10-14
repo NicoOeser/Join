@@ -1,0 +1,59 @@
+@media (min-width: 871px) {
+    .backgroundAddTaskOverlay {
+        width: 0;
+        height: 100vh;
+        transition: width 0.3s, background-color 2s;
+    }
+    .bgAddTaskOvSlide{
+        width: 100%;
+    }
+    .addTaskOvGeneralSettings {
+        max-width: 1160px;
+        max-height: 870px;
+        width: 95%;
+        overflow-y: hidden;  
+    }
+    .contentContainerAddTaskOv{
+        flex-direction: row;
+        justify-content: center;
+        gap: 48px;
+        overflow-y: hidden;
+    }
+    .contentContainerAddTask{
+        gap: 48px;
+        width: 100%;
+    }
+    .ContentDeskmiddleContainerAddTaskOv{
+        height: 424px;
+        width: 1px;
+        background-color: #D1D1D1;
+        display: block;
+    }
+    .ContentDeskContainerAddTaskOv{
+        width: 440px;
+        max-height: 424px;
+        overflow-y: auto;
+    }
+    .assingToDesk{
+        display: flex;
+    }
+    .assingToMob{
+        display: none !important;
+    }
+    .flip{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+
+@media (min-width: 1070px) {
+    .addTaskOvGeneralSettings{
+        align-items: center;
+    }
+    .headlineAddTaskOv{
+width: 991px;
+    }
+    .submitContainerAddTaskOv{
+        width: 991px;
+    }
+}

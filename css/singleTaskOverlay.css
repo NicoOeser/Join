@@ -1,0 +1,186 @@
+.backgroundTaskOverlay {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.089);
+    z-index: 1021;
+    transition: 0.5s;
+}
+
+.bgOuterContainerTaskOverlay {
+    max-width: 396px;
+    width: 100%;
+    max-height: calc(100vh - 0px);
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px 0px #00000029;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 32px 0;
+
+}
+
+.taskOvText {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+}
+
+.bgInnerContainerTaskOverlay {
+    width: 348px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.topAreaOv {
+    height: 32px;
+}
+
+.taskHeadlineOv {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 43px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.taskDescriptionOv {
+    max-height: 70px;
+    overflow-y: auto;
+}
+
+.dueDateAndUrgencyContainerOv {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 25px;
+}
+
+.taskOvSectionHeadline {
+    color: #42526E;
+}
+
+.urgencySubContainerOv {
+    text-transform: capitalize;
+    display: flex;
+    padding: 0 18px;
+    gap: 10px;
+}
+
+.singleTaskMemberContainerOV {
+    margin-top: 8px;
+    max-height: 112px;
+    overflow-y: auto;
+}
+
+.singleTaskMemberSubContainerOV {
+    padding: 7px 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    text-transform: capitalize;
+}
+
+.memberDiskOv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 400;
+    color: white;
+    line-height: 14px;
+    border: 1px solid white;
+    border-radius: 100%;
+    height: 42px;
+    width: 42px;
+}
+
+.singleTaskSubTaskContainerOV {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 64px;
+    overflow-y: auto;
+}
+
+.singleTaskSubTaskSubContainerOV {
+    display: flex;
+    padding: 6px 16px;
+    gap: 16px;
+}
+.singleTaskSubTaskSubContainerOV:hover {
+    background-color: #5e626975;
+}
+
+.check_box {
+    display:none;
+}
+
+.check_box + label{
+    background:url('../assets/img/taskOverlayChkEmpty.svg') no-repeat;
+    display:inline-block;
+    padding: 0 0 0 40px;
+}
+
+.check_box:checked + label{
+    background:url('../assets/img/taskOverlayChkDone.svg') no-repeat;
+    display:inline-block;
+    padding: 0 0 0 40px;
+}
+.bottomAreaSubContainer{
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.bottomAreaContainerSeparatorOv{
+    border: 1px solid #D1D1D1;
+    height: 24px;
+    margin: 0 8px; 
+}
+
+/* style delete PopUp */
+.deletePopUpBg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.253);
+    z-index: 1030;
+}
+
+.deletePopUpContainer{
+    background-color: white;
+    box-shadow: 0px 0px 10px 3px #00000014;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    width: 334px;
+    border-radius: 30px;
+}
+.deletePopUpButton{
+    border: 1px solid #2A3647;
+    border-radius: 16px;
+    padding: 8px;
+    width: 80px;
+}
+.deletePopUpButton:hover{
+    background-color: #2A3647;
+    color: #D1D1D1;
+}

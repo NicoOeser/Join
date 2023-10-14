@@ -1,0 +1,145 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-Regular.woff') format('woff');
+    font-family: 'Inter Bold';
+    src: url('../assets/fonts/inter-v12-latin-700.woff2') format('woff2');
+}
+
+body {
+    margin: 0;
+    cursor: default;
+    background: #F6F7F8;
+    overflow: hidden;
+}
+
+#content {
+    overflow-y: auto;
+    background: #F6F7F8;
+    padding: 40px 60px;
+}
+
+#idBackgroundContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Mindestens die volle Höhe des Viewports */
+}
+
+#idHeaderBody,
+footer {
+    position: relative;
+    z-index: 1;
+    /* Damit sie über den Inhalt angezeigt werden */
+}
+
+.help-content {
+    padding: 64px 64px 20px 64px;
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+}
+
+.title {
+    font-family: 'Inter';
+    font-weight: bold;
+    font-size: 73px;
+    color: #000000;
+}
+
+.header-help {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-help img {
+    cursor: pointer;
+}
+
+.subtitle {
+    font-family: 'Inter Bold';
+    font-size: 27px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.subtitle-table {
+    font-family: 'Inter Bold';
+    font-size: 22px;
+}
+
+.join-color {
+    color: #29ABE2;
+}
+
+.link {
+    color: #29ABE2;
+    cursor: pointer;
+}
+
+p {
+    font-size: 16px;
+    font-family: 'Inter';
+    text-align: justify;
+}
+
+table {
+    height: 200px;
+}
+
+tr td:first-child {
+    font-size: 22px;
+    font-family: 'Inter Bold';
+    width: 50px;
+    vertical-align: top;
+}
+
+tr td:nth-child(2) {
+    font-family: 'Inter';
+    font-size: 20px;
+    text-align: justify;
+
+}
+
+@media (max-width: 830px) {
+    .title {
+        font-size: 48px;
+    }
+
+    .help-content {
+        padding: 64px 64px 20px 64px;
+        max-height: calc(100vh - 200px);
+    }
+}
+
+@media (max-width: 425px) {
+
+    .title {
+        font-size: 32px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .help-content {
+        padding: 64px 20px;
+        max-height: calc(100vh - 200px);
+    }
+
+    .subtitle-table {
+        font-family: 'Inter Bold';
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    tr td:first-child {
+        font-size: 14px;
+    }
+
+    tr td:nth-child(2) {
+        font-size: 12px;
+    }
+}

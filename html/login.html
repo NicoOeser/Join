@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../assets/favicon/site.webmanifest">
+
+
+    <!-- Bootstrap Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/login-responsiv.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+
+    <!-- JS -->  
+    <script src="../js/script.js"></script>
+    <script src="../js/loginMessages.js"></script>
+    <script src="../js/login.js"></script>
+    <script src="../js/resetPassword.js"></script>
+
+    
+
+    <title>Join-Login</title>
+</head>
+
+<body onload=" initAnimation(); initAnimationResponsiv()">
+
+    <div id="initAnimation" class="init-animation" style="display:flex">
+        <img id="initAnimationImg" src="../assets/img/logo-black.svg">
+    </div>
+
+    <div id="initAnimationResponsiv" class="init-animation-responsiv" style="display: flex">
+        <img id="initAnimationImgResponsiv" src="../assets/img/logo-white.svg" style="display: flex">
+    </div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <img class="logo-black" src="../assets/img/logo-black.svg">
+            <div id="headerRight" class="header-right">
+                <div>Not a Join user?</div>
+                <button onclick="openSignUp()" class="sign-up">Sign up</button>
+            </div>
+        </div>
+
+        <div class="login-inclusive-responsiv" id="loginInclusiveResponsiv">
+            <div class="login-content" id="loginContent">
+                <div class="login-title">
+                    <div>Log in</div>
+                </div>
+                <img class="underline" src="../assets/img/login-underline.png">
+
+                <form onsubmit="login(); return false" ;>
+                    <div class="login-input">
+                        <div class="mail">
+                            <input id="email" type="email" name="email" placeholder="Email" required autocomplete="on">
+                            <img src="../assets/img/login-email.svg">
+                        </div>
+                        <div class="mail">
+                            <input id="password" type="password" name="password" placeholder="Password" required
+                                autocomplete="on">
+                            <img src="../assets/img/login-password.svg">
+                        </div>
+                    </div>
+                    <div class="password-check">
+                        <div class="remember-password">
+                            <input type="checkbox" id="checkbox">
+                            <label class="not-markable" for="checkbox">Remember me</label>
+                        </div>
+                        <div onclick="openForgotPassword()" class="forgot-password">Forgot my password</div>
+                    </div>
+                    <div class="login-btn">
+                        <button class="login">Log in</button>
+                        <button onclick="window.location.href='summary.html'" class="guest-login">Guest Log in</button>
+                    </div>
+                    <div class="msg-box" id="message" style="display:none"></div>
+                </form>
+            </div>
+            <div id="headerRightResponsiv" class="header-right-responsiv">
+                <div>Not a Join user?</div>
+                <button onclick="openSignUp()" class="sign-up-btn-responsiv">Sign up</button>
+            </div>
+            <div class="confirm-text-responsiv-login" id="confirmTextResponsivLogin" style="display: none;"></div>
+            <div class="footer-links">
+                <a href="../html/privacy_policy.html" class="footer-link">Privacy Policy</a>
+                <a href="../html/legal_notice.html" class="footer-link">Legal Notice</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

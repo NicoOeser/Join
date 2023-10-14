@@ -1,0 +1,38 @@
+font-face {
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-Regular.woff') format('woff');
+    font-family: 'Inter Bold';
+    src: url('../assets/fonts/Inter-Bold.woff') format('woff');
+}
+
+body {
+    font-family: 'Inter';
+    height: 100vh;
+    
+}
+
+input {
+    border: 1px solid #D1D1D1;
+    border-radius: 10px;
+    padding: 13px 21px 13px 21px;
+    width: 90vw;
+    height: 6vh;
+}
+
+.H100vhOFhoidden{
+    height: 100vh;
+    overflow: hidden;
+}
+
+.JCspacebetween{
+    justify-content: space-between !important
+}
+
+.textcap {
+    text-transform: capitalize;
+}
+
+.contactsContent {
+    display: flex;
+}
+

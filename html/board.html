@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico" />
+
+
+    <!-- Bootstrap Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+
+    <!-- <link rel="stylesheet" href="../css/summary.css"> -->
+    <link rel="stylesheet" href="../css/board.css">
+    <link rel="stylesheet" href="../css/headerFooter.css">
+    <link rel="stylesheet" href="../css/singleTask.css">
+    <link rel="stylesheet" href="../css/singleTaskOverlay.css">
+    <link rel="stylesheet" href="../css/add_task_overlay.css">
+    <link rel="stylesheet" href="../css/add_task_overlay_desktop.css">
+
+    <!-- <link rel="stylesheet" href="../css/contacts.css"> -->
+
+
+    <!-- JS -->
+    <script src="../js/script.js"></script>
+    <script src="../js/add_contact.js"></script>
+    <script src="../js/headFootTemplate.js" defer></script>
+    <script src="../js/board.js" defer></script>
+    <script src="../js/boardSingleTask.js" defer></script>
+    <script src="../js/boardSingleTaskOverlay.js" defer></script>
+    <script src="../js/add_task_overlay.js" defer></script>
+    <script src="../js/add_task_overlay_html_temp.js" defer></script>
+    <script src="../js/edit_task.js" defer></script>
+
+    <script src="../js/testTaskJSON.js"></script>
+</head>
+
+<body onload="init(), renderTasks()">
+    <div id="idBackgroundContainer" class="BackgroundContainer">
+        <div id="idHeaderBody" class="HeaderBody">
+            <header w3-include-html="../assets/templates/headerTemplate.html"></header>
+            <main class="boardGeneralSettings ">
+                <div id="idBoardHead" class="boardHeadBgCont">
+                    <div class="headBoard">
+                        <div id="idBoardHead1" class="BoardHead1">
+                            <h1 class="boardHeading">Board</h1>
+                            <button class="hideSmallBtnH1">
+                                <img src="../assets/img/BoardAddTaskTop.svg" alt=""
+                                    onclick="openAddtaskOverlay('toDo')">
+                            </button>
+                        </div>
+                        <div id="idBoardHead2" class="BoardHead2">
+                            <div id="idSearchContainer" class="myBoardHead2 d-flex justify-content-between">
+                                <input id="idBoardSearch" type="search" placeholder="Find Task" class="boardSearch"
+                                    onsearch="searchTask('idBoardSearch')" onkeyup="searchTask('idBoardSearch')">
+                                <div class="searchDivider"></div>
+                                <img src="../assets/img/boardSearch.svg" alt="magnifyingGlass"
+                                    onclick="searchTask('idBoardSearch')">
+                            </div>
+                            <button class="hideSmallBtnH2">
+                                <img class=" " role="button" src="../assets/img/BoardAddTaskTop.svg" alt=""
+                                    onclick="openAddtaskOverlay('toDo')">
+                            </button>
+                            <button class="headAddTaskBtn" onclick="openAddtaskOverlay('toDo')">
+                                <span>Add task</span>
+                                <img src="../assets/img/BoardAddTaskTop.svg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                    <div id="idBoardHead3" class="headBoard3">
+                        <div id="idFirstContentBoardDesk" class="d-flex justify-content-between contentBoard">
+                            <h3>To do</h3>
+                            <img role="button" src="../assets/img/boardSmallAddTask.svg" alt="" class="customButton"
+                                onclick="openAddtaskOverlay('toDo')">
+                        </div>
+                        <div id="idSecondContentBoardDesk" class="d-flex justify-content-between contentBoard">
+                            <h3>In progress</h3>
+                            <img role="button" src="../assets/img/boardSmallAddTask.svg" alt="" class="customButton"
+                                onclick="openAddtaskOverlay('inProgress')">
+                        </div>
+                        <div id="idThirdContentBoardDesk" class="d-flex justify-content-between contentBoard">
+                            <h3>Await feedback</h3>
+                            <img role="button" src="../assets/img/boardSmallAddTask.svg" alt="" class="customButton"
+                                onclick="openAddtaskOverlay('awaitFeedback')">
+                        </div>
+                        <div id="idFourthContentBoardDesk" class="d-flex contentBoard">
+                            <h3>Done</h3>
+                        </div>
+                    </div>
+                </div>
+                <div id="idContentBoard" class="boardContent">
+                    <div id="idFirstContentContainer" class="" ondrop="moveTo('toDo')" ondragover="allowDrop(event)">
+                        <div id="idFirstContentBoardMob" class="d-flex justify-content-between contentBoard conBoMob">
+                            <h3>To do</h3>
+                            <img role="button" src="../assets/img/boardSmallAddTask.svg" alt="" class="customButton"
+                                onclick="openAddtaskOverlay('toDo')">
+                        </div>
+                        <div class="boardTaskContainer">
+                            <div id="idTaskToDoDefault" class="defaultTaskContainer"><span>No Tasks To do</span>
+                            </div>
+                            <div id="idTaskToDo" class="taskContainer">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="idSecondContentContainer" class="" ondrop="moveTo('inProgress')"
+                        ondragover="allowDrop(event)">
+                        <div id="idSecondContentBoardMob" class="d-flex justify-content-between contentBoard conBoMob">
+                            <h3>In progress</h3>
+                            <img role="button" src="../assets/img/boardSmallAddTask.svg" alt="" class="customButton"
+                                onclick="openAddtaskOverlay('inProgress')">
+                        </div>
+                        <div class="boardTaskContainer">
+                            <div id="idTaskInProgressDefault" class="defaultTaskContainer"><span>No Tasks In
+                                    progress</span></div>
+                            <div id="idTaskInProgress" class="taskContainer">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="idThirdContentContainer" class="" ondrop="moveTo('awaitFeedback')"
+                        ondragover="allowDrop(event)">
+                        <div id="idThirdContentBoardMob" class="d-flex justify-content-between contentBoard conBoMob">
+                            <h3>Await feedback</h3>
+                            <img role="button" src="../assets/img/boardSmallAddTask.svg" alt="" class="customButton"
+                                onclick="openAddtaskOverlay('awaitFeedback')">
+                        </div>
+                        <div class="boardTaskContainer">
+                            <div id="idTaskAwaitFeedbackDefault" class="defaultTaskContainer"><span>No Tasks Await
+                                    feedback</span></div>
+                            <div id="idTaskAwaitFeedback" class="taskContainer">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="idFourthContentContainer" class="" ondrop="moveTo('done')" ondragover="allowDrop(event)">
+                        <div id="idFourthContentBoardMob" class="d-flex contentBoard conBoMob">
+                            <h3>Done</h3>
+                        </div>
+                        <div class="boardTaskContainer">
+                            <div id="idTaskDoneDefault" class="defaultTaskContainer"><span>No Tasks Done</span>
+                            </div>
+                            <div id="idTaskDone" class="taskContainer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="idTaskOverlay"></div>
+                <div id="idAddTaskOverlay"></div>
+                <div id="idAddTaskPopupOv" class="addTaskPopup">
+                    <span>Task successfully created!</span>
+                </div>
+                <div id="idAddNewContactOverlay"></div>
+            </main>
+        </div>
+        <footer w3-include-html="../assets/templates/footer.html"></footer>
+    </div>
+</body>
+
+</html>

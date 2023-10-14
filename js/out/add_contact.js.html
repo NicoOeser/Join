@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: add_contact.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: add_contact.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const colors = ['#FF7A00', '#FF5EB3', '#6E52FF', '#9327FF', '#00BEE8', '#1FD7C1', '#FF745E', '#FFA35E', '#FC71FF', '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'];
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const contactsContainer = document.getElementById('contactsContainer');
+
+let contactJSONBE = [];
+
+let contactJSON1 = {
+  "email": "",
+  "initials": "",
+  "name": "",
+  "bgColor": "",
+  "phone": ""
+}
+
+
+/**
+ * This function loads the contacts from the backend into the local contact JSON
+ * 
+ */
+async function loadContacts() {
+  contactJSONBE = await loadJSON(KEY_for_JSON_CONTACS);
+}
+
+
+/**
+ * This funtion renders the contactlist and fills it with the loaded contacts
+ * 
+ */
+async function createContactList() {
+  await loadContacts();
+  const contacts = contactJSONBE
+
+  for (const letter of alphabet) {
+    const filteredContacts = contacts
+      .filter(contact => contact.name.toLowerCase().startsWith(letter))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    if (filteredContacts.length > 0) {
+      const html = `
+                &lt;div class="contact-letter">${letter.toUpperCase()}&lt;/div>
+                &lt;hr class="letter-line">
+                &lt;div class="contacts-list">
+                    ${filteredContacts.map((contact, index) => {
+        const contactIndex = contacts.indexOf(contact);
+        return `
+                            &lt;div class="contact" onclick="showContactInfo(${contactIndex})">
+                                &lt;div class="circle" style="background-color: ${contact.bgColor};">${contact.initials}&lt;/div>
+                                &lt;div class="nameDiv">
+                                    &lt;span class="textcap">${contact.name}&lt;/span>
+                                    &lt;span class="colorLink"> ${contact.email}&lt;/span>
+                                &lt;/div>
+                            &lt;/div>
+                        `;
+      }).join('')}
+                &lt;/div>
+            `;
+      contactsContainer.innerHTML += html;
+    }
+  }
+}
+
+
+/**
+ * This funtion adds new contacts to the contacts JSON 
+ * 
+ */
+async function addContact() {
+  createButton.disabled = true
+  loadContacts()
+  getContactsValues();
+  contactJSONBE.push(contactJSON1);
+  await setItem(KEY_for_JSON_CONTACS, contactJSONBE);
+  closeOvelayAfterNewContact()
+  createButton.disabled = false
+}
+
+
+/**
+ * This function renders the contactlist with new contacts, closes the overlay and displays the new contact
+ * 
+ */
+function closeOvelayAfterNewContact() {
+  displayNewContact()
+  contactsContainer.innerHTML = ''
+  createContactList()
+  closeAddContactOverlay()
+  showAndHideContactAddedOverlay()
+}
+
+
+/**
+ * This function displays the newly added contact 
+ * 
+ */
+function displayNewContact(){
+  let display= contactJSONBE.length - 1;
+  showContactInfo(display)
+}
+
+
+/**
+ * This funtion adds the newly edited contact to the contacts JSON and renders teh contactlist
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+async function addContactViaEditOverlay(i){
+  createButton.disabled = true
+  getContactsValuesEditOVerlay(i);
+  contactJSONBE.splice(i, 1);
+  contactJSONBE.push(contactJSON1);
+  await setItem(KEY_for_JSON_CONTACS, contactJSONBE);
+  closeOvelayAfterNewContact()
+  createButton.disabled = false
+}
+
+
+/**
+ * This function gets the values from the overlay inputfields that are needed for editing a contact 
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+function getContactsValuesEditOVerlay(i){
+  let name = document.getElementById('inputName').value
+  let mail = document.getElementById('inputMail').value
+  let phone = document.getElementById('inputTel').value
+  let initial = name.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
+  let bgColor = contactJSONBE[i].bgColor  
+
+  contactJSON1.email = mail
+  contactJSON1.initials = initial
+  contactJSON1.name = name
+  contactJSON1.bgColor = bgColor
+  contactJSON1.phone = phone
+}
+
+
+/**
+ * This function gets the values from the overlay inputfields that are needed for adding a contact 
+ * 
+ */
+function getContactsValues() {
+  let name = document.getElementById('inputName').value
+  let mail = document.getElementById('inputMail').value
+  let phone = document.getElementById('inputTel').value
+  let initial = name.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
+  let bgColor = setColor()
+
+  contactJSON1.email = mail
+  contactJSON1.initials = initial
+  contactJSON1.name = name
+  contactJSON1.bgColor = bgColor
+  contactJSON1.phone = phone
+}
+
+
+/**
+ * This funtion gives every new contact a color
+ * 
+ * @returns the color of the newly added contact 
+ */
+function setColor() {
+  let i = contactJSONBE.length;
+  let color = colors[i % colors.length];
+  return color
+}
+
+
+/**
+ * This function sets the responsive css for the contacts page 
+ * 
+ */
+function hideContactInfo() {
+  document.getElementById('leftDiv').classList.remove('dd-none')
+  document.getElementById('rightDiv').classList.add('dd-none')
+  document.getElementById('rightDiv').classList.remove('rightDivRes')
+}
+
+
+/**
+ * This function sets the desctop view css fot the contacts page
+ * 
+ */
+function hideContactInfoDektop() {
+  document.getElementById('ContactsInfoContainer').classList.add('dd-none')
+}
+
+
+/**
+ * This funtion displays the selected contact from the contactlist next to it
+ * 
+ * @param {number} i - index of the selected contact in the contacts JSON 
+ */
+function showContactInfo(i) {
+  document.getElementById('ContactsInfoContainer').classList.remove('dd-none')
+
+  if (window.innerWidth &lt; 750) {
+    document.getElementById('leftDiv').classList.add('dd-none')
+    document.getElementById('rightDiv').classList.remove('dd-none')
+    document.getElementById('rightDiv').classList.add('rightDivRes')
+  }
+
+  setContactInfo(i)
+  setEditDeleteDivDesktop(i)
+}
+
+
+/**
+ * This funtion gets the values that are needes to display a selected conatct next to the conatctlist 
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+function setContactInfo(i){
+  let circle = document.getElementById('contactsCircle');
+  let name = document.getElementById('contactsName');
+  let mail = document.getElementById('contactsMail');
+  let phone = document.getElementById('contactsPhone');
+
+  circle.innerHTML = contactJSONBE[i].initials;
+  circle.style.backgroundColor = contactJSONBE[i].bgColor;
+  name.innerHTML = contactJSONBE[i].name;
+  mail.innerHTML = contactJSONBE[i].email;
+  if (contactJSONBE[i].phone == undefined) {
+    phone.innerHTML = 'Please edit phone number'
+  } else {
+    phone.innerHTML = contactJSONBE[i].phone;
+  }  
+}
+
+
+/**
+ * This function resets the HTML in the area where the selected contacts are displayed
+ * 
+ */
+function resetContactInfo(){
+  let circle = document.getElementById('contactsCircle');
+  let name = document.getElementById('contactsName');
+  let mail = document.getElementById('contactsMail');
+  let phone = document.getElementById('contactsPhone');
+
+  circle.innerHTML = '';
+  circle.style.backgroundColor = 'transparent';
+  name.innerHTML = '';
+  mail.innerHTML = '';
+  phone.innerHTML = '';
+}
+
+
+/**
+ * This function assigns the contact that is going to be edited/deleted to the edit and delted buttons 
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+function setEditDeleteDivDesktop(i) {
+  document.getElementById('editDelteContactDektop').innerHTML = editDelteContactDektop(i)
+
+  document.getElementById('editDeletOverlay').innerHTML = editDeletOverlay(i)
+}
+
+
+/**
+ * This function edits a selected contact 
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+function editContact(i){
+  openAddContactOverlay()
+  setEditContactOVerlay(i)
+}
+
+
+/**
+ * This function sets the edit contact interface and fills the inputfileds and initialscircle with the infotmation of the contact that is gooing to be edited
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+function setEditContactOVerlay(i){
+  editContactOverlayTemplate(i)
+
+  let overlayHeader = document.getElementById('overlayHeader')
+  let overlayHeaderText = document.getElementById('overlayHeaderText')
+  let overlayCircle = document.getElementById('overlayCircle')
+ 
+  let inputName = document.getElementById('inputName')
+  let inputMail = document.getElementById('inputMail')
+  let inputTel = document.getElementById('inputTel')
+ 
+  let overlayButtonDiv = document.getElementById('overlayButtonDiv')
+   
+  overlayHeader.innerHTML = 'Edit Contact';
+  overlayHeaderText.classList.add('dd-none')
+  overlayCircle.innerHTML = contactJSONBE[i].initials;
+  overlayCircle.style.backgroundColor = contactJSONBE[i].bgColor;
+ 
+  inputName.value = contactJSONBE[i].name;
+  inputMail.value = contactJSONBE[i].email;
+  inputTel.value = contactJSONBE[i].phone;
+ 
+  overlayButtonDiv.innerHTML = overlayEditButtonDiv(i)
+  document.getElementById('overlayButtonDiv').classList.add('JCspacebetween')
+}
+
+
+/**
+ * This function sets the add contact interface
+ * 
+ */
+function setAddContactOVerlay(){
+  addContactOverlayTemplate()
+
+  let overlayHeader = document.getElementById('overlayHeader')
+  let overlayHeaderText = document.getElementById('overlayHeaderText')
+  let overlayCircle = document.getElementById('overlayCircle')
+ 
+  let inputName = document.getElementById('inputName')
+  let inputMail = document.getElementById('inputMail')
+  let inputTel = document.getElementById('inputTel')
+ 
+  let overlayButtonDiv = document.getElementById('overlayButtonDiv')
+  
+ 
+  overlayHeader.innerHTML = 'Add contact';
+  overlayHeaderText.classList.remove('dd-none')
+  overlayCircle.style.backgroundColor = '#d1d1d1';
+  overlayCircle.innerHTML ='&lt;img src="../assets/img/person_add_contact_overlay.svg">'
+ 
+  inputName.value = '';
+  inputMail.value = '';
+  inputTel.value = '';
+ 
+  overlayButtonDiv.innerHTML = overlayAddButtonDivTemplate()
+}
+
+
+/**
+ * This function deletes a contact from the contact JSON and renders the contactlist without the deleted contact 
+ * 
+ * @param {number} i - index of the edited contact in the contacts JSON
+ */
+async function deleteContact(i) {
+  contactJSONBE.splice(i, 1)
+  await setItem(KEY_for_JSON_CONTACS, contactJSONBE);
+  hideContactInfoDektop(); 
+  document.getElementById('contactsContainer').innerHTML = '';
+  resetContactInfo()
+  createContactList();
+
+  if (window.innerWidth &lt; 750) {
+    hideContactInfo()
+  }
+}
+
+
+/**
+ * This function opens the add contact overlay
+ * 
+ */
+function openAddContactOverlay() {
+  document.getElementById('addContactMenu').classList.add('dd-none');
+  document.getElementById('createContactOverlay').classList.remove('hide');
+  document.getElementById('createContactOverlay').classList.add('show');
+  setAddContactOVerlay()
+}
+
+
+/**
+ * This function closes the add contact overlay 
+ * 
+ */
+function closeAddContactOverlay() {
+  document.getElementById("addContactForm").reset();
+  document.getElementById('addContactMenu').classList.remove('dd-none');
+  document.getElementById('createContactOverlay').classList.remove('show');
+  document.getElementById('createContactOverlay').classList.add('hide'); 
+}
+
+
+/**
+ * This function shows the contact succesfully created overlay
+ * 
+ */
+function showContactAddedOverlay(){
+  document.getElementById('contactAddedOVerlay').classList.remove('hide')
+  document.getElementById('contactAddedOVerlay').classList.add('show')
+}
+
+/**
+ * This function hides the contact succesfully created overlay
+ * 
+ */
+function hideContactAddedOverlay(){
+  document.getElementById('contactAddedOVerlay').classList.add('hide')
+  document.getElementById('contactAddedOVerlay').classList.remove('show')
+}
+
+/**
+ * This function resets the contact succesfully created overlay CSS
+ * 
+ */
+function resetContactAddedOverlay(){
+  document.getElementById('contactAddedOVerlay').classList.remove('hide')
+}
+
+
+/**
+ * This function shows and hides the contact succesfully created overlay after 2 seconds
+ * 
+ */
+function showAndHideContactAddedOverlay(){
+  setTimeout(function () {
+    showContactAddedOverlay()
+  }, 300);
+  setTimeout(function () {
+    hideContactAddedOverlay();
+  }, 2000);
+}
+
+/**
+ * This function shows the edit and delete buttons in responsive view
+ * 
+ */
+function showEditDeletOverlay() {
+  document.getElementById('editDeletOverlay').classList.add('show')
+  document.getElementById('editDeletOverlay').classList.remove('hide')
+}
+
+
+/**
+ * This function hides the edit and delete buttons in responsive view
+ * 
+ */
+function hideEditDeletOverlay() {
+  document.getElementById('editDeletOverlay').classList.add('hide')
+  document.getElementById('editDeletOverlay').classList.remove('show')
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addContactOverlayTemplate">addContactOverlayTemplate</a></li><li><a href="global.html#addContactViaEditOverlay">addContactViaEditOverlay</a></li><li><a href="global.html#addDataEditTaskOverlay">addDataEditTaskOverlay</a></li><li><a href="global.html#addDataSingleTaskOverlay">addDataSingleTaskOverlay</a></li><li><a href="global.html#addGreetingPhrase">addGreetingPhrase</a></li><li><a href="global.html#addNewUser">addNewUser</a></li><li><a href="global.html#addNumToSummary">addNumToSummary</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addTaskTitle">addTaskTitle</a></li><li><a href="global.html#addTaskTxt">addTaskTxt</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#addValuesToSummary">addValuesToSummary</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#arePasswordsMatching">arePasswordsMatching</a></li><li><a href="global.html#buildDateFormat">buildDateFormat</a></li><li><a href="global.html#calcTaskId">calcTaskId</a></li><li><a href="global.html#callAddContact">callAddContact</a></li><li><a href="global.html#callFunctionForSingleTask">callFunctionForSingleTask</a></li><li><a href="global.html#changeStatus">changeStatus</a></li><li><a href="global.html#checkExistingUser">checkExistingUser</a></li><li><a href="global.html#checkUncheckSubtask">checkUncheckSubtask</a></li><li><a href="global.html#clearAddTaskForm">clearAddTaskForm</a></li><li><a href="global.html#clearContainer">clearContainer</a></li><li><a href="global.html#clearRegistrationForm">clearRegistrationForm</a></li><li><a href="global.html#closeAddContactOverlay">closeAddContactOverlay</a></li><li><a href="global.html#closeAddTaskOv">closeAddTaskOv</a></li><li><a href="global.html#closeOvelayAfterNewContact">closeOvelayAfterNewContact</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#colorTaskType">colorTaskType</a></li><li><a href="global.html#confirmSendMail">confirmSendMail</a></li><li><a href="global.html#countTasks">countTasks</a></li><li><a href="global.html#createContactList">createContactList</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#deleteTaskCancel">deleteTaskCancel</a></li><li><a href="global.html#deleteTaskConfirm">deleteTaskConfirm</a></li><li><a href="global.html#displayAndHideMessage">displayAndHideMessage</a></li><li><a href="global.html#displayErrorMessage">displayErrorMessage</a></li><li><a href="global.html#displayNewContact">displayNewContact</a></li><li><a href="global.html#displayPasswordMismatchErrorMessage">displayPasswordMismatchErrorMessage</a></li><li><a href="global.html#displaySendPasswordMessageAndRedirect">displaySendPasswordMessageAndRedirect</a></li><li><a href="global.html#displaySuccessMessageAndRedirect">displaySuccessMessageAndRedirect</a></li><li><a href="global.html#displayUserMessageOrRedirect">displayUserMessageOrRedirect</a></li><li><a href="global.html#displayUserNotFoundErrorMessage">displayUserNotFoundErrorMessage</a></li><li><a href="global.html#displayUserNotFoundMessage">displayUserNotFoundMessage</a></li><li><a href="global.html#displayUserNotFoundMessageForEmail">displayUserNotFoundMessageForEmail</a></li><li><a href="global.html#doNotCloseOverlay">doNotCloseOverlay</a></li><li><a href="global.html#dragStart">dragStart</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editContactOverlayTemplate">editContactOverlayTemplate</a></li><li><a href="global.html#editDeletOverlay">editDeletOverlay</a></li><li><a href="global.html#editDelteContactDektop">editDelteContactDektop</a></li><li><a href="global.html#editSubtask">editSubtask</a></li><li><a href="global.html#editSubtaskText">editSubtaskText</a></li><li><a href="global.html#editTaskLoadValues">editTaskLoadValues</a></li><li><a href="global.html#findUserByEmail">findUserByEmail</a></li><li><a href="global.html#findUserByEmailAndPassword">findUserByEmailAndPassword</a></li><li><a href="global.html#generateHTMLifNotUserDesktop">generateHTMLifNotUserDesktop</a></li><li><a href="global.html#generateHTMLifNotUserMobile">generateHTMLifNotUserMobile</a></li><li><a href="global.html#getContactsValues">getContactsValues</a></li><li><a href="global.html#getContactsValuesEditOVerlay">getContactsValuesEditOVerlay</a></li><li><a href="global.html#getEmailFromURLParams">getEmailFromURLParams</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getSubtaskFromForm">getSubtaskFromForm</a></li><li><a href="global.html#getValuesForTaskArr">getValuesForTaskArr</a></li><li><a href="global.html#getValuesFromForm">getValuesFromForm</a></li><li><a href="global.html#greetingText">greetingText</a></li><li><a href="global.html#handleCheckboxNotChecked">handleCheckboxNotChecked</a></li><li><a href="global.html#handleExistingUser">handleExistingUser</a></li><li><a href="global.html#handleExistingUserDesktop">handleExistingUserDesktop</a></li><li><a href="global.html#handleExistingUserMobile">handleExistingUserMobile</a></li><li><a href="global.html#handleFailureResponse">handleFailureResponse</a></li><li><a href="global.html#handleMissingName">handleMissingName</a></li><li><a href="global.html#handleMissingNameDesktop">handleMissingNameDesktop</a></li><li><a href="global.html#handleMissingNameMobile">handleMissingNameMobile</a></li><li><a href="global.html#handlePasswordMismatch">handlePasswordMismatch</a></li><li><a href="global.html#handleResponse">handleResponse</a></li><li><a href="global.html#handleResponseDesktop">handleResponseDesktop</a></li><li><a href="global.html#handleResponseMobile">handleResponseMobile</a></li><li><a href="global.html#handleSignUpButtonClick">handleSignUpButtonClick</a></li><li><a href="global.html#handleSuccessResponse">handleSuccessResponse</a></li><li><a href="global.html#hideContactAddedOverlay">hideContactAddedOverlay</a></li><li><a href="global.html#hideContactInfo">hideContactInfo</a></li><li><a href="global.html#hideContactInfoDektop">hideContactInfoDektop</a></li><li><a href="global.html#hideEditDeletOverlay">hideEditDeletOverlay</a></li><li><a href="global.html#hidePopup">hidePopup</a></li><li><a href="global.html#highlight">highlight</a></li><li><a href="global.html#includeHTML">includeHTML</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAnimation">initAnimation</a></li><li><a href="global.html#initAnimationResponsiv">initAnimationResponsiv</a></li><li><a href="global.html#initials">initials</a></li><li><a href="global.html#innerClick">innerClick</a></li><li><a href="global.html#limitTextTo37Char">limitTextTo37Char</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadContatsToAssinged">loadContatsToAssinged</a></li><li><a href="global.html#loadJSON">loadJSON</a></li><li><a href="global.html#loadUsers">loadUsers</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#memberInitials">memberInitials</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#openAddContactOverlay">openAddContactOverlay</a></li><li><a href="global.html#openAddtaskOverlay">openAddtaskOverlay</a></li><li><a href="global.html#openBoardPage">openBoardPage</a></li><li><a href="global.html#overlayAddButtonDivTemplate">overlayAddButtonDivTemplate</a></li><li><a href="global.html#overlayEditButtonDiv">overlayEditButtonDiv</a></li><li><a href="global.html#passwordNotMatchDesktop">passwordNotMatchDesktop</a></li><li><a href="global.html#passwordNotMatchMobile">passwordNotMatchMobile</a></li><li><a href="global.html#popUp">popUp</a></li><li><a href="global.html#privacyPolicy">privacyPolicy</a></li><li><a href="global.html#privacyPolicyCheckboxDesktop">privacyPolicyCheckboxDesktop</a></li><li><a href="global.html#privacyPolicyCheckboxMobile">privacyPolicyCheckboxMobile</a></li><li><a href="global.html#processEmailConfirmation">processEmailConfirmation</a></li><li><a href="global.html#redirectToLoginPage">redirectToLoginPage</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#renderAllContainer">renderAllContainer</a></li><li><a href="global.html#renderOverlayTask">renderOverlayTask</a></li><li><a href="global.html#renderStatusContainer">renderStatusContainer</a></li><li><a href="global.html#renderTasks">renderTasks</a></li><li><a href="global.html#resetContactAddedOverlay">resetContactAddedOverlay</a></li><li><a href="global.html#resetContactInfo">resetContactInfo</a></li><li><a href="global.html#resetInputFields">resetInputFields</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#resetPasswordDesktop">resetPasswordDesktop</a></li><li><a href="global.html#resetPasswordMobile">resetPasswordMobile</a></li><li><a href="global.html#resetTask2">resetTask2</a></li><li><a href="global.html#resetUserPassword">resetUserPassword</a></li><li><a href="global.html#resetUserPasswordOrDisplayError">resetUserPasswordOrDisplayError</a></li><li><a href="global.html#saveNewUserInContacts">saveNewUserInContacts</a></li><li><a href="global.html#searchFunction">searchFunction</a></li><li><a href="global.html#searchTask">searchTask</a></li><li><a href="global.html#selectionHTML">selectionHTML</a></li><li><a href="global.html#sendPasswordDesktop">sendPasswordDesktop</a></li><li><a href="global.html#sendPasswordMobile">sendPasswordMobile</a></li><li><a href="global.html#setAddContactOVerlay">setAddContactOVerlay</a></li><li><a href="global.html#setColor">setColor</a></li><li><a href="global.html#setContactInfo">setContactInfo</a></li><li><a href="global.html#setEditContactOVerlay">setEditContactOVerlay</a></li><li><a href="global.html#setEditDeleteDivDesktop">setEditDeleteDivDesktop</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setNewUser">setNewUser</a></li><li><a href="global.html#showAndHideContactAddedOverlay">showAndHideContactAddedOverlay</a></li><li><a href="global.html#showContactAddedOverlay">showContactAddedOverlay</a></li><li><a href="global.html#showContactInfo">showContactInfo</a></li><li><a href="global.html#showEditDeletOverlay">showEditDeletOverlay</a></li><li><a href="global.html#showPopup">showPopup</a></li><li><a href="global.html#showUserNames">showUserNames</a></li><li><a href="global.html#singleTaskOvHtmlTemp">singleTaskOvHtmlTemp</a></li><li><a href="global.html#storeNewTask">storeNewTask</a></li><li><a href="global.html#subTaskBarProgress">subTaskBarProgress</a></li><li><a href="global.html#switchIons">switchIons</a></li><li><a href="global.html#taskMember">taskMember</a></li><li><a href="global.html#taskOverlayDate">taskOverlayDate</a></li><li><a href="global.html#taskOverlayMember">taskOverlayMember</a></li><li><a href="global.html#taskOverlayMemberContainer">taskOverlayMemberContainer</a></li><li><a href="global.html#taskOverlayMemberDiskContainer">taskOverlayMemberDiskContainer</a></li><li><a href="global.html#taskOverlayMemberDiskHTML">taskOverlayMemberDiskHTML</a></li><li><a href="global.html#taskOverlayMemberHTML">taskOverlayMemberHTML</a></li><li><a href="global.html#taskOverlayPrio">taskOverlayPrio</a></li><li><a href="global.html#taskOverlaySubTaskContainer">taskOverlaySubTaskContainer</a></li><li><a href="global.html#taskOverlaySubTaskHTML">taskOverlaySubTaskHTML</a></li><li><a href="global.html#taskOverlaySubTasks">taskOverlaySubTasks</a></li><li><a href="global.html#taskTemplate">taskTemplate</a></li><li><a href="global.html#taskUrgency">taskUrgency</a></li><li><a href="global.html#toggleChkBox">toggleChkBox</a></li><li><a href="global.html#toggleDefaultContainer">toggleDefaultContainer</a></li><li><a href="global.html#toggleDivUsrDropVsMemberDisk">toggleDivUsrDropVsMemberDisk</a></li><li><a href="global.html#togglePopupBar">togglePopupBar</a></li><li><a href="global.html#toggleSignUpButton">toggleSignUpButton</a></li><li><a href="global.html#toggleselectedAssignTo">toggleselectedAssignTo</a></li><li><a href="global.html#upcommingDeadline">upcommingDeadline</a></li><li><a href="global.html#validateFullName">validateFullName</a></li><li><a href="global.html#validatePasswordMatch">validatePasswordMatch</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Sep 11 2023 15:53:18 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

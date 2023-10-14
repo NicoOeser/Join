@@ -1,0 +1,134 @@
+.singleTaskContainer {
+    width: 252px;
+    /* hier muss ich noch schaun, dass die Breite passt wegen dem Schatten */
+    height: 263px;
+    /* das hier muss auf auto später */
+    box-shadow: 0px 0px 10px 3px #00000014;
+    padding: 16px;
+    border-radius: 24px;
+    background-color: white;
+    transition: transform 200ms;
+}
+
+.singleTaskContainer:hover{
+  transform: rotate(2deg);
+}
+
+.singlTaskType {
+    display: flex;
+    align-items: center;
+    height: 27px;
+    width: fit-content;
+    border-radius: 8px;
+    padding: 4px 16px 4px 16px;
+    background: #0038FF;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* css for dropdown for changing status */
+.changeStatus {
+    border: 0;
+    font-size: 0;
+    color: rgba(137, 43, 226, 0.267);
+}
+
+.changeStatus:hover {
+    color: rgb(51, 129, 219);
+    transform: rotate(15deg);
+    transition: all 300ms ease-in-out;
+}
+.changeStatus:focus {
+    color: rgb(51, 129, 219);
+    transform: rotate(15deg);
+}
+
+.custom-select::-ms-expand {
+    display: none; /* remove standard Dropdown-Arrow in IE */ 
+}
+
+.changeStatus option {
+    font-size: 14px;
+    color: black;
+}
+/* css for dropdown for changing status end */
+
+.singelTaskTexts {
+    margin: 24px 0;
+    height: 84px;
+}
+
+.singleTaskHeadline {
+
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+}
+
+.singleTaskTxt {
+    line-height: 19px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #A8A8A8;
+}
+
+.TaskSubTask {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.SingleTaskSubProgressOuterCon {
+    height: 8px;
+    width: 128px;
+    border-radius: 8px;
+    background-color: #F4F4F4;
+}
+
+.SingleTaskSubProgress {
+    height: 8px;
+    width: 0px;
+    border-radius: 8px;
+    background-color: #4589FF;
+}
+
+.SingleTaksCount {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.SingleTaskMemberPrio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+    width: 220px;
+}
+
+.SingleTaskPrio img {
+    width: 26px;
+}
+
+.SingleTaskMember {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+}
+
+.memberDisk {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 400;
+    border: 1px solid white;
+    border-radius: 100%;
+    height: 30px;
+    width: 30px;
+    margin-left: -6px;
+}

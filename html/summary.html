@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summery</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico" />
+    
+
+    <!-- Bootstrap Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/summary.css">
+    <link rel="stylesheet" href="../css/headerFooter.css">
+    
+    <!-- JS -->
+    <script src="../js/script.js"></script>
+    <script src="../js/summary.js" defer></script>
+    <script src="../js/headFootTemplate.js" defer></script>
+
+</head>
+
+<body onload="init(), addValuesToSummary()">
+    <div id="idBackgroundContainer">
+        <div id="idHeaderBody">
+            <header w3-include-html="../assets/templates/headerTemplate.html"></header>
+            <div id="idCompleteSummary" class="CompleteSummary d-flex justify-content-center gap-5">
+                <section class="mx-3">
+                    <div class="summarHeader">
+                        <h1>Summary</h1>
+                        <div class="summarHeaderFlip">
+                            <p>Everything in a nutshell!</p>
+                            <div class="summaryLine"></div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-5">
+                        <div id="idTaskOverview" class="taskOverviewSize">
+                            <div id="idTaskOverviewTop" class="taskOvContainer d-flex justify-content-between gap24">
+                                <a href="../html/board.html" id="idAllTasks" class="task3Container contShadowHover">
+                                    <div class="taskOvervieInnerContainer mx-4 my-2 text-center">
+                                        <h2 id="idCountAllTasks" class="taskNumbers">5</h2>
+                                        <p class="taskTxt">Tasks in Board</p>
+                                    </div>
+                                </a>
+                                <a href="../html/board.html" id="idTasksInProgess" class="task3Container contShadowHover">
+                                    <div class="taskOvervieInnerContainer mx-4 my-2 text-center">
+                                        <h2 id="idCountTasksInProgress" class="taskNumbers">2</h2>
+                                        <p class="taskTxt">Tasks in Progress</p>
+                                    </div>
+                                </a>
+                                <a href="../html/board.html" id="idTaskAwaitingFeedback" class="task3Container contShadowHover">
+                                    <div class="taskOvervieInnerContainer mx-4 my-2 text-center">
+                                        <h2 id="idCounttaskAwaitingFeedback" class="taskNumbers">2</h2>
+                                        <p class="taskTxt">Awaiting Feedback</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <a id="idTaskOverviewMiddle" href="../html/board.html"
+                                class="taskUrgentContainer contShadowHover d-flex justify-content-center align-items-center">
+                                <div id="idTaskOverviewMiddleLeft" class="taskUrgentLeft d-flex align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="summaryUrgentCircle  d-flex justify-content-center align-items-center">
+                                            <img src="../assets/img/summeryUrgent.svg" alt="Urgent">
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <h2 id="idTaskUrgent" class="taskNumbers">1</h2>
+                                        <p class="taskTxt">Urgent</p>
+                                    </div>
+                                </div>
+                                <div id="idTaskOverviewMiddleMid">
+
+                                </div>
+                                <div id="idTaskOverviewMiddleRight" class="taskUrgentRight">
+                                    <p id="idTaksUrgentDate">October 16, 2022</p>
+                                    <p class="taskTxt">Upcoming Deadline</p>
+                                </div>
+                            </a>
+                            <div id="idTaskOverviewBottom" class="taskRestOvContainer d-flex justify-content-between">
+                                <a href="../html/board.html"
+                                    class="taskRestOvWidth contShadowHover d-flex justify-content-center align-items-center gap-2">
+                                    <div id="idPencilImg">
+                                        
+                                    </div>
+                                    <div class="text-center">
+                                        <h2 id="idTaskToDd" class="taskNumbers">1</h2>
+                                        <p class="taskTxt">To-Do</p>
+                                    </div>
+                                </a>
+                                <a href="../html/board.html"
+                                    class="taskRestOvWidth contShadowHover d-flex justify-content-center align-items-center gap-2">
+                                    <div  id="idDoneImg">
+                                        
+                                     </div>
+                                    <div class="text-center">
+                                        <h2 id="idTaskDone" class="taskNumbers">1</h2>
+                                        <p class="taskTxt">Done</p>
+                                    </div>
+
+                                </a>
+                            </div>
+                        </div>
+                        <div id="idWelcome" class="showWelcome d-none d-flex align-items-center justify-content-center flex-column">
+                            <h2 id="idWelcomeMessage">Hello!</h2>
+                            <h1 id="idWelcomeUserName"></h1>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <footer w3-include-html="../assets/templates/footer.html"></footer>
+    </div>
+</body>
+
+</html>

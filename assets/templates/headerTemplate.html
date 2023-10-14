@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-between headerContainer sticky-top ">
+  <div id="headerRight">
+    <div role="button" href="index.html">
+      <img class="headImg" src="../assets/favicon/favicon-32x32.png" alt="JoinIcon">
+    </div>
+    <div class="toolName">
+      <span>Kanban Project Management Tool</span>
+    </div>
+  </div>
+  <div id="headerRight" class="headerRightContainer">
+    <a id="helpIcon"  href="help.html" class="iconHelp">
+      <img class="headHelpImg" src="../assets/img/headerHelp.svg" alt="helpIcon">
+    </a>
+    <a onclick="togglePopupBar()" class="initials">
+      <div class="headCircle d-flex justify-content-center align-items-center">
+        <div id="userIntials">
+        </div>
+      </div>
+    </a>
+    <div id="popupBar" class="d-none">
+      <a href="../html/legal_notice.html">Legal Notice</a>
+      <a href="../html/privacy_policy.html">Privacy Policy</a>
+      <a href="../html/help.html" class="help-link">Help</a>
+      <a href="../html/login.html" onclick="logout();">Log out</a> 
+    </div>
+  </div>
+
+</div>

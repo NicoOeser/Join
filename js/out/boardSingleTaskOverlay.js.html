@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: boardSingleTaskOverlay.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: boardSingleTaskOverlay.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+// ~~~~~~~~Task overlay~~~~~~~~~
+/**
+ * This function renders the task overlay
+ * 
+ * @param {number} taskNumber - task number of aktive task
+ */
+function renderOverlayTask(taskNumber) {
+    
+    document.getElementById('idTaskOverlay').innerHTML = singleTaskOvHtmlTemp(taskNumber);
+    addDataSingleTaskOverlay(taskNumber);
+
+}
+/**
+ * This function returns the HTML Code for the task overlay
+ * 
+ * @param {number} taskNr - number of clicked task
+ * @returns - returns the HTML Code for the task overlay
+ */
+function singleTaskOvHtmlTemp(taskNr) {
+    return /*html*/ `    
+    &lt;section id="idBackgroundTaskOverlay" class="backgroundTaskOverlay" onclick="closeOverlay('idTaskOverlay')">
+        &lt;div id="idBgOuterContainerTaskOverlay" class="bgOuterContainerTaskOverlay" onclick="innerClick(event)">
+            &lt;div id="idBgInnerContainerTaskOverlay" class="bgInnerContainerTaskOverlay taskOvText">
+                &lt;div id="idTopAreaOv" class="topAreaOv d-flex justify-content-between">
+                    &lt;div id="idTaskTypeOv" class="singlTaskType"> &lt;/div>
+                    &lt;div id="idTaskCloseOv" class="customButton" role="button" onclick="closeOverlay('idTaskOverlay')">
+                        &lt;img src="../assets/img/taskOverlayClose.svg" alt="">
+                    &lt;/div>
+                &lt;/div>
+                &lt;div id="idTaskHeadlineOv" class="taskHeadlineOv">&lt;/div>
+                &lt;div id="idTaskDescriptionOv" class="taskDescriptionOv">&lt;/div>
+                &lt;div id="idDueDateContainerOv" class="dueDateAndUrgencyContainerOv">
+                    &lt;span class="taskOvSectionHeadline">Due date:&lt;/span>
+                    &lt;span id="idDueDateOv">&lt;/span>
+                &lt;/div>
+                &lt;div id="idUrgencyContainerOv" class="dueDateAndUrgencyContainerOv">
+                    &lt;span class="taskOvSectionHeadline">Priority:&lt;/span>
+                    &lt;div id="idUrgencySubContainerOv" class="urgencySubContainerOv">
+                        &lt;span id="idUrgencyOv">&lt;/span>
+                        &lt;img id="idSingleTaskPrioImgOv" src="" alt="">
+                    &lt;/div>
+                &lt;/div>
+                &lt;div id="idAssingedToContainer">
+                    &lt;span id="idAssingedTo" class="taskOvSectionHeadline">Assinged To:&lt;/span>
+                    &lt;div id="idSingleTaskMemberContainerOV" class="singleTaskMemberContainerOV">
+                        &lt;!-- extra function taskOverlayMember(activeTask) for adding Members-->
+                    &lt;/div>
+                &lt;/div>
+                &lt;div id="idSubTaskContainerOv">
+                    &lt;span id="idSubTaskOv" class="taskOvSectionHeadline">Subtasks:&lt;/span>
+                    &lt;div id="idSubTaskSubContainerOv" class="singleTaskSubTaskContainerOV">
+                        &lt;!-- extra function taskOverlaySubTasks(activeTask) for adding subtasks-->
+                    &lt;/div>
+                &lt;/div>
+                &lt;div id="idBottomAreaOv" class="d-flex justify-content-end">
+                    &lt;div id="idBottomAreaContainerOv" class="d-flex align-item-center">
+                        &lt;div id="idDeleteContainerOv" class="bottomAreaSubContainer customButton" role="button" onclick="deleteTask(${taskNr})">
+                            &lt;img src="../assets/img/taskOverlayTrash.svg" alt="waste">
+                            &lt;span>Delete&lt;/span>
+                        &lt;/div>
+                        &lt;div id="idBottomAreaContainerSeparatorOv" class="bottomAreaContainerSeparatorOv">&lt;/div> 
+                        &lt;div id="idEditContainer"  class="bottomAreaSubContainer customButton"  role="button"  onclick="renderEditTask(${taskNr})">
+                            &lt;img src="../assets/img/taskOverlayEdit.svg" alt="edit">
+                            &lt;span>Edit&lt;/span>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/section>`
+}
+
+/**
+ * this function removes all html in container idTaskOverlay
+ */
+function closeOverlay(overlay) {
+    document.getElementById(overlay).innerHTML = '';
+    renderTasks();
+}
+
+/**
+ * this function calls different function for adding values from task JSON to html
+ * 
+ * @param {number} taskNumber - number of clicked task
+ */
+function addDataSingleTaskOverlay(taskNr) {
+    let activeTask = taskJson[taskNr];
+    addTaskTitle(activeTask.headline, 'Ov');
+    colorTaskType(activeTask.taskType, 'Ov');
+    document.getElementById('idTaskDescriptionOv').innerText = activeTask.description;
+    taskOverlayDate(activeTask);
+    taskOverlayPrio(activeTask);
+    taskOverlayMember(activeTask);
+    taskOverlaySubTasks(activeTask, taskNr);
+}
+
+/**
+ * This function get the due date and give to idTaskDescriptionOv the formated date
+ * 
+ * @param {object} activeTask - single task
+ */
+function taskOverlayDate(activeTask) {
+    let taskDate = new Date(activeTask.dueDate);
+    let taskMonth = +taskDate.getMonth().toString() + 1;
+    let taskDay = taskDate.getDate().toString();
+    let taskYear = taskDate.getFullYear().toString();
+    taskDay = (taskDay.length === 2) ? taskDay : ('0' + taskDay);
+    taskMonth = (taskMonth > 9) ? taskMonth : ('0' + taskMonth);
+    document.getElementById('idDueDateOv').innerText = taskDay + '/' + taskMonth + '/' + taskYear;
+}
+
+/**
+ * This function add to the html the urgency and the related image
+ * 
+ * @param {object} activeTask - single task
+ */
+function taskOverlayPrio(activeTask) {
+    document.getElementById('idUrgencyOv').innerText = activeTask.urgency;
+    taskUrgency(activeTask.urgency, 'Ov');
+}
+
+/**
+ * this function gets the member information from contactJson based on the member tracked for this single task
+ * 
+ * @param {object} activeTask - clicked task
+ */
+function taskOverlayMember(activeTask) {
+    const MEMBER = activeTask.member;
+    document.getElementById('idSingleTaskMemberContainerOV').innerHTML = taskOverlayMemberContainer(MEMBER);
+}
+
+/**
+ * this function returns the complete HTML code for all members of this task
+ * 
+ * @param {object} MEMBER - all members of task
+ * @returns - HTML Code for all member of task
+ */
+function taskOverlayMemberContainer(MEMBER) {
+    let memberHTML = '';
+    for (let i = 0; i &lt; MEMBER.length; i++) {
+        const contactMember = contactJSON.find(contact => contact.name === MEMBER[i]);
+        if (contactMember) {
+            const memberColor = contactMember.bgColor.slice(1);
+            memberHTML += taskOverlayMemberHTML(MEMBER[i], memberColor, contactMember.initials, i);
+        }
+    }
+    return memberHTML
+}
+
+/**
+ * this function returns the HTML code for a single member of this task
+ * 
+ * @param {string} memberName - name of member
+ * @param {string} memberColor - background color for disk of member
+ * @param {string} memberinitials - intitials of member
+ * @param {number} i - count of loop
+ * @returns - HTML for single member of this task
+ */
+function taskOverlayMemberHTML(memberName, memberColor, memberinitials, i) {
+    return /*html*/ `
+    &lt;div id="idSingleTaskMemberSubContainerOV${i}" class="singleTaskMemberSubContainerOV">
+        &lt;div id="idSingleTaskMemberInitialsOv${i}" class="memberDiskOv memberBgColor${memberColor}">${memberinitials}&lt;/div>
+        &lt;span id="idSingleTaskMemberFullNameOv${i}">${memberName}&lt;/span>
+    &lt;/div>`
+}
+
+/**
+ * this function gets the sub task information from contactJson based on the sub tasks tracked for this single task
+ * 
+ * @param {object} activeTask - selected task
+ * @param {number} activeTaskNr - number of open task
+ */
+function taskOverlaySubTasks(activeTask, activeTaskNr) {
+    const TASKS = activeTask.subTaskText;
+    document.getElementById('idSubTaskSubContainerOv').innerHTML = taskOverlaySubTaskContainer(TASKS, activeTaskNr);
+}
+
+/**
+ * this function returns the complete HTML code for all subtasks of this task
+ * 
+ * @param {object} TASKS  - all subtasks of task
+ * @param {number} activeTaskNr - number of open task
+ * @returns - HTML Code for all subtasks of task
+ */
+function taskOverlaySubTaskContainer(TASKS, activeTaskNr) {
+    let tasksHTML = '';
+    for (let i = 0; i &lt; TASKS.length; i++) {
+        let taskChecked = TASKS[i].checked ? "checked" : '';
+        tasksHTML += taskOverlaySubTaskHTML(TASKS[i].label, taskChecked, activeTaskNr, i);
+    }
+    return tasksHTML
+}
+
+/**
+ * this function returns the HTML code for a single subtask of this task
+ * 
+ * @param {string} taskLabel - text of subtask
+ * @param {string} taskChecked - checked if checked is true. If false string is empty
+ * @param {number} activeTaskNr - number of open task
+ * @param {number} i - count of loop 
+ * @returns - html Code for sub tasks
+ */
+function taskOverlaySubTaskHTML(taskLabel, taskChecked, activeTaskNr, i) {
+    return /*html*/ `
+    &lt;div id="idSingleSubTaskContainerOv${i}"  class="singleTaskSubTaskSubContainerOV" role="button" onchange="checkUncheckSubtask(${activeTaskNr})">
+        &lt;input id="idSingleSubTaskChkboxOv${i}" type="checkbox" class="check_box" ${taskChecked}>
+        &lt;label id="idSingleSubTaskLabelOv${i}" for="idSingleSubTaskChkboxOv${i}">${taskLabel}&lt;/label>
+    &lt;/div>`
+}
+
+/**
+ * this function calls the pop up for delete task
+ * 
+ * @param {number} taskNr  - number of open task
+ */
+function deleteTask(taskNr) {
+    document.getElementById('idTaskOverlay').innerHTML += popUp(taskNr);
+}
+
+/**
+ * This function returns the HTNL code for the delete PopUp
+ * 
+ * @param {number} taskNr  - number of open task
+ * @returns - html code for the delete PopUp
+ */
+function popUp(taskNr) {
+    return /*html*/ `
+    &lt;div id="idDeletePopUpBackground" class="deletePopUpBg">
+        &lt;div id="idDeletePopUpContainer" class="deletePopUpContainer text-center">
+            &lt;h5>You will delete this task?&lt;/h5>
+               &lt;p> Please confirm.&lt;/p>
+            &lt;div id="idDeletePopUpButtonSection" class="d-flex justify-content-between align-item-center p-4 w-100" >
+                &lt;div id="idDeletePopUpButtonCancel" class="deletePopUpButton" onclick="deleteTaskCancel(${taskNr})" role="button">Cancel&lt;/div>
+                &lt;div id="idDeletePopUpButtonConfirm" class="deletePopUpButton" onclick="deleteTaskConfirm(${taskNr})" role="button">Confirm&lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>`
+}
+
+/**
+ * This function get the task JSON from Backend, removes the selected task and the overlay task card and send the task JSON back to Backend
+ * 
+ * @param {number} taskNr  - number of open task
+ */
+async function deleteTaskConfirm(taskNr) {
+    taskJson = await loadJSON(KEY_for_JSON_TASKS);
+    taskJson.splice(taskNr, 1);
+    setItem(KEY_for_JSON_TASKS, taskJson);
+    document.getElementById('idTaskOverlay').innerHTML = '';
+    renderTasks();
+}
+
+/**
+ * This function removes the delete popup
+ * 
+ * @param {number} taskNr - number of open task 
+ */
+function deleteTaskCancel(taskNr) {
+    renderOverlayTask(taskNr);
+}
+
+/**
+ * 
+ * @param {number} taskNr - number of open task
+ */
+async function checkUncheckSubtask(taskNr) {
+    taskJson = await loadJSON(KEY_for_JSON_TASKS);
+    let solvedSubtask = 0;
+    for (let i = 0; i &lt; taskJson[taskNr].subTaskTotal; i++) {
+        let subtaskChk = document.getElementById('idSingleSubTaskChkboxOv' + i).checked;
+        subtaskChk == true ? solvedSubtask++ : '';
+        taskJson[taskNr].subTaskText[i].checked = subtaskChk;
+    }
+    taskJson[taskNr].doneSubTasks = solvedSubtask;
+    setItem(KEY_for_JSON_TASKS, taskJson);
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addContactOverlayTemplate">addContactOverlayTemplate</a></li><li><a href="global.html#addContactViaEditOverlay">addContactViaEditOverlay</a></li><li><a href="global.html#addDataEditTaskOverlay">addDataEditTaskOverlay</a></li><li><a href="global.html#addDataSingleTaskOverlay">addDataSingleTaskOverlay</a></li><li><a href="global.html#addGreetingPhrase">addGreetingPhrase</a></li><li><a href="global.html#addNewUser">addNewUser</a></li><li><a href="global.html#addNumToSummary">addNumToSummary</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addTaskTitle">addTaskTitle</a></li><li><a href="global.html#addTaskTxt">addTaskTxt</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#addValuesToSummary">addValuesToSummary</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#arePasswordsMatching">arePasswordsMatching</a></li><li><a href="global.html#buildDateFormat">buildDateFormat</a></li><li><a href="global.html#calcTaskId">calcTaskId</a></li><li><a href="global.html#callAddContact">callAddContact</a></li><li><a href="global.html#callFunctionForSingleTask">callFunctionForSingleTask</a></li><li><a href="global.html#changeStatus">changeStatus</a></li><li><a href="global.html#checkExistingUser">checkExistingUser</a></li><li><a href="global.html#checkUncheckSubtask">checkUncheckSubtask</a></li><li><a href="global.html#clearAddTaskForm">clearAddTaskForm</a></li><li><a href="global.html#clearContainer">clearContainer</a></li><li><a href="global.html#clearRegistrationForm">clearRegistrationForm</a></li><li><a href="global.html#closeAddContactOverlay">closeAddContactOverlay</a></li><li><a href="global.html#closeAddTaskOv">closeAddTaskOv</a></li><li><a href="global.html#closeOvelayAfterNewContact">closeOvelayAfterNewContact</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#colorTaskType">colorTaskType</a></li><li><a href="global.html#confirmSendMail">confirmSendMail</a></li><li><a href="global.html#countTasks">countTasks</a></li><li><a href="global.html#createContactList">createContactList</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#deleteTaskCancel">deleteTaskCancel</a></li><li><a href="global.html#deleteTaskConfirm">deleteTaskConfirm</a></li><li><a href="global.html#displayAndHideMessage">displayAndHideMessage</a></li><li><a href="global.html#displayErrorMessage">displayErrorMessage</a></li><li><a href="global.html#displayNewContact">displayNewContact</a></li><li><a href="global.html#displayPasswordMismatchErrorMessage">displayPasswordMismatchErrorMessage</a></li><li><a href="global.html#displaySendPasswordMessageAndRedirect">displaySendPasswordMessageAndRedirect</a></li><li><a href="global.html#displaySuccessMessageAndRedirect">displaySuccessMessageAndRedirect</a></li><li><a href="global.html#displayUserMessageOrRedirect">displayUserMessageOrRedirect</a></li><li><a href="global.html#displayUserNotFoundErrorMessage">displayUserNotFoundErrorMessage</a></li><li><a href="global.html#displayUserNotFoundMessage">displayUserNotFoundMessage</a></li><li><a href="global.html#displayUserNotFoundMessageForEmail">displayUserNotFoundMessageForEmail</a></li><li><a href="global.html#doNotCloseOverlay">doNotCloseOverlay</a></li><li><a href="global.html#dragStart">dragStart</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editContactOverlayTemplate">editContactOverlayTemplate</a></li><li><a href="global.html#editDeletOverlay">editDeletOverlay</a></li><li><a href="global.html#editDelteContactDektop">editDelteContactDektop</a></li><li><a href="global.html#editSubtask">editSubtask</a></li><li><a href="global.html#editSubtaskText">editSubtaskText</a></li><li><a href="global.html#editTaskLoadValues">editTaskLoadValues</a></li><li><a href="global.html#findUserByEmail">findUserByEmail</a></li><li><a href="global.html#findUserByEmailAndPassword">findUserByEmailAndPassword</a></li><li><a href="global.html#generateHTMLifNotUserDesktop">generateHTMLifNotUserDesktop</a></li><li><a href="global.html#generateHTMLifNotUserMobile">generateHTMLifNotUserMobile</a></li><li><a href="global.html#getContactsValues">getContactsValues</a></li><li><a href="global.html#getContactsValuesEditOVerlay">getContactsValuesEditOVerlay</a></li><li><a href="global.html#getEmailFromURLParams">getEmailFromURLParams</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getSubtaskFromForm">getSubtaskFromForm</a></li><li><a href="global.html#getValuesForTaskArr">getValuesForTaskArr</a></li><li><a href="global.html#getValuesFromForm">getValuesFromForm</a></li><li><a href="global.html#greetingText">greetingText</a></li><li><a href="global.html#handleCheckboxNotChecked">handleCheckboxNotChecked</a></li><li><a href="global.html#handleExistingUser">handleExistingUser</a></li><li><a href="global.html#handleExistingUserDesktop">handleExistingUserDesktop</a></li><li><a href="global.html#handleExistingUserMobile">handleExistingUserMobile</a></li><li><a href="global.html#handleFailureResponse">handleFailureResponse</a></li><li><a href="global.html#handleMissingName">handleMissingName</a></li><li><a href="global.html#handleMissingNameDesktop">handleMissingNameDesktop</a></li><li><a href="global.html#handleMissingNameMobile">handleMissingNameMobile</a></li><li><a href="global.html#handlePasswordMismatch">handlePasswordMismatch</a></li><li><a href="global.html#handleResponse">handleResponse</a></li><li><a href="global.html#handleResponseDesktop">handleResponseDesktop</a></li><li><a href="global.html#handleResponseMobile">handleResponseMobile</a></li><li><a href="global.html#handleSignUpButtonClick">handleSignUpButtonClick</a></li><li><a href="global.html#handleSuccessResponse">handleSuccessResponse</a></li><li><a href="global.html#hideContactAddedOverlay">hideContactAddedOverlay</a></li><li><a href="global.html#hideContactInfo">hideContactInfo</a></li><li><a href="global.html#hideContactInfoDektop">hideContactInfoDektop</a></li><li><a href="global.html#hideEditDeletOverlay">hideEditDeletOverlay</a></li><li><a href="global.html#hidePopup">hidePopup</a></li><li><a href="global.html#highlight">highlight</a></li><li><a href="global.html#includeHTML">includeHTML</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAnimation">initAnimation</a></li><li><a href="global.html#initAnimationResponsiv">initAnimationResponsiv</a></li><li><a href="global.html#initials">initials</a></li><li><a href="global.html#innerClick">innerClick</a></li><li><a href="global.html#limitTextTo37Char">limitTextTo37Char</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadContatsToAssinged">loadContatsToAssinged</a></li><li><a href="global.html#loadJSON">loadJSON</a></li><li><a href="global.html#loadUsers">loadUsers</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#memberInitials">memberInitials</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#openAddContactOverlay">openAddContactOverlay</a></li><li><a href="global.html#openAddtaskOverlay">openAddtaskOverlay</a></li><li><a href="global.html#openBoardPage">openBoardPage</a></li><li><a href="global.html#overlayAddButtonDivTemplate">overlayAddButtonDivTemplate</a></li><li><a href="global.html#overlayEditButtonDiv">overlayEditButtonDiv</a></li><li><a href="global.html#passwordNotMatchDesktop">passwordNotMatchDesktop</a></li><li><a href="global.html#passwordNotMatchMobile">passwordNotMatchMobile</a></li><li><a href="global.html#popUp">popUp</a></li><li><a href="global.html#privacyPolicy">privacyPolicy</a></li><li><a href="global.html#privacyPolicyCheckboxDesktop">privacyPolicyCheckboxDesktop</a></li><li><a href="global.html#privacyPolicyCheckboxMobile">privacyPolicyCheckboxMobile</a></li><li><a href="global.html#processEmailConfirmation">processEmailConfirmation</a></li><li><a href="global.html#redirectToLoginPage">redirectToLoginPage</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#renderAllContainer">renderAllContainer</a></li><li><a href="global.html#renderOverlayTask">renderOverlayTask</a></li><li><a href="global.html#renderStatusContainer">renderStatusContainer</a></li><li><a href="global.html#renderTasks">renderTasks</a></li><li><a href="global.html#resetContactAddedOverlay">resetContactAddedOverlay</a></li><li><a href="global.html#resetContactInfo">resetContactInfo</a></li><li><a href="global.html#resetInputFields">resetInputFields</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#resetPasswordDesktop">resetPasswordDesktop</a></li><li><a href="global.html#resetPasswordMobile">resetPasswordMobile</a></li><li><a href="global.html#resetTask2">resetTask2</a></li><li><a href="global.html#resetUserPassword">resetUserPassword</a></li><li><a href="global.html#resetUserPasswordOrDisplayError">resetUserPasswordOrDisplayError</a></li><li><a href="global.html#saveNewUserInContacts">saveNewUserInContacts</a></li><li><a href="global.html#searchFunction">searchFunction</a></li><li><a href="global.html#searchTask">searchTask</a></li><li><a href="global.html#selectionHTML">selectionHTML</a></li><li><a href="global.html#sendPasswordDesktop">sendPasswordDesktop</a></li><li><a href="global.html#sendPasswordMobile">sendPasswordMobile</a></li><li><a href="global.html#setAddContactOVerlay">setAddContactOVerlay</a></li><li><a href="global.html#setColor">setColor</a></li><li><a href="global.html#setContactInfo">setContactInfo</a></li><li><a href="global.html#setEditContactOVerlay">setEditContactOVerlay</a></li><li><a href="global.html#setEditDeleteDivDesktop">setEditDeleteDivDesktop</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setNewUser">setNewUser</a></li><li><a href="global.html#showAndHideContactAddedOverlay">showAndHideContactAddedOverlay</a></li><li><a href="global.html#showContactAddedOverlay">showContactAddedOverlay</a></li><li><a href="global.html#showContactInfo">showContactInfo</a></li><li><a href="global.html#showEditDeletOverlay">showEditDeletOverlay</a></li><li><a href="global.html#showPopup">showPopup</a></li><li><a href="global.html#showUserNames">showUserNames</a></li><li><a href="global.html#singleTaskOvHtmlTemp">singleTaskOvHtmlTemp</a></li><li><a href="global.html#storeNewTask">storeNewTask</a></li><li><a href="global.html#subTaskBarProgress">subTaskBarProgress</a></li><li><a href="global.html#switchIons">switchIons</a></li><li><a href="global.html#taskMember">taskMember</a></li><li><a href="global.html#taskOverlayDate">taskOverlayDate</a></li><li><a href="global.html#taskOverlayMember">taskOverlayMember</a></li><li><a href="global.html#taskOverlayMemberContainer">taskOverlayMemberContainer</a></li><li><a href="global.html#taskOverlayMemberDiskContainer">taskOverlayMemberDiskContainer</a></li><li><a href="global.html#taskOverlayMemberDiskHTML">taskOverlayMemberDiskHTML</a></li><li><a href="global.html#taskOverlayMemberHTML">taskOverlayMemberHTML</a></li><li><a href="global.html#taskOverlayPrio">taskOverlayPrio</a></li><li><a href="global.html#taskOverlaySubTaskContainer">taskOverlaySubTaskContainer</a></li><li><a href="global.html#taskOverlaySubTaskHTML">taskOverlaySubTaskHTML</a></li><li><a href="global.html#taskOverlaySubTasks">taskOverlaySubTasks</a></li><li><a href="global.html#taskTemplate">taskTemplate</a></li><li><a href="global.html#taskUrgency">taskUrgency</a></li><li><a href="global.html#toggleChkBox">toggleChkBox</a></li><li><a href="global.html#toggleDefaultContainer">toggleDefaultContainer</a></li><li><a href="global.html#toggleDivUsrDropVsMemberDisk">toggleDivUsrDropVsMemberDisk</a></li><li><a href="global.html#togglePopupBar">togglePopupBar</a></li><li><a href="global.html#toggleSignUpButton">toggleSignUpButton</a></li><li><a href="global.html#toggleselectedAssignTo">toggleselectedAssignTo</a></li><li><a href="global.html#upcommingDeadline">upcommingDeadline</a></li><li><a href="global.html#validateFullName">validateFullName</a></li><li><a href="global.html#validatePasswordMatch">validatePasswordMatch</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Sep 11 2023 15:53:18 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

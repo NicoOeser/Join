@@ -1,0 +1,46 @@
+.bgAddTask{
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    height: calc(100vh - 159px);
+}
+
+.addTaskGeneralSettings {
+    max-width: 500px;
+    width: 100%;
+    padding: 0 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 16px;
+    color: black;
+    line-height: 19px;
+    background-color: #F6F7F8;
+}
+
+.contentContainerAddTask {
+    display: flex;
+    flex-direction: column;
+    /* gap: 16px; */
+    overflow-y: auto;
+    padding: 0 8px;
+}
+.contentContainerAddTaskOv {
+    display: flex;
+    flex-direction: column;
+    /* gap: 16px; */
+    overflow-y: auto;
+    padding: 0 8px;
+}
+
+.headlineAddTaskOv {
+    color: #000;
+    font-size: 47px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 56px;
+    margin: 48px 0 32px 16px;
+}
+
+
+    

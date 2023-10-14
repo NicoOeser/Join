@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../assets/favicon/site.webmanifest">
+
+
+    <!-- Bootstrap Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/login-responsiv.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+
+    <!-- JS -->
+    <script src="../js/script.js"></script>
+    <script src="../js/loginMessages.js"></script>
+    <script src="../js/login.js"></script>
+    <script src="../js/resetPassword.js"></script>
+
+
+    <title>Sign Up</title>
+</head>
+
+
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img class="logo-black" src="../assets/img/logo-black.svg">
+        </div>
+        <div class="sign-up-content">
+            <div class="login-content">
+                <div class="login-title">
+                    <a href="../html/login.html"><img src="../assets/img/sign-up-arrow-left.svg"></a>
+                    <div>Sign up</div>
+                </div>
+                <img class="underline" src="../assets/img/login-underline.png">
+
+                <form onsubmit="addUser(); return false">
+                    <div class="login-input">
+                        <div class="mail">
+                            <input id="newName" type="name" name="name" placeholder="Name & Surname" required autocomplete="on">
+                            <img src="../assets/img/sign-up-name.svg">
+                        </div>
+                        <div class="mail">
+                            <input id="signUpEmail" type="email" name="email" placeholder="Email" required
+                                autocomplete="on">
+                            <img src="../assets/img/login-email.svg">
+                        </div>
+                        <div class="mail">
+                            <input id="newPassword" type="password" name="password" placeholder="Password" required
+                                autocomplete="on">
+                            <img src="../assets/img/login-password.svg">
+                        </div>
+                        <div class="mail">
+                            <input id="confirmPassword" type="password" name="password" placeholder="Confirm Password"
+                                required autocomplete="on">
+                            <img src="../assets/img/login-password.svg">
+                        </div>
+                    </div>
+                    <div class="sign-up-check">
+                        <div class="remember-password">
+                            <input type="checkbox" id="signUpCheckbox" onchange="toggleSignUpButton(this)">
+                            <label class="not-markable" for="signUpCheckbox">I accept the</label>
+                        </div>
+                        <div onclick="privacyPolicy()" class="forgot-password">&nbsp;Privacy policy</div>
+                    </div>
+                    <button class="sign-up-btn" id="signUpButton" onclick="addUser()">Sign up</button>
+                    <div class="msg-box" id="messageNewUser" style="display:none"></div>
+                    
+                </form>
+            </div>
+        </div>
+        <div class="confirm-text-responsiv-sign-up" id="confirmTextResponsivSignUp" style="display: none;"></div>
+        <div class="footer-links">
+            <a href="../html/privacy_policy.html" class="footer-link">Privacy Policy</a>
+            <a href="../html/legal_notice.html" class="footer-link">Legal Notice</a>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+</html>

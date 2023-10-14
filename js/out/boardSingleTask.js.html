@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: boardSingleTask.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: boardSingleTask.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * this function calls all functions for adding values to the html code within the active task
+ * 
+ * @param {object} activeTask 
+ * @param {number} taskNumber 
+ */
+function callFunctionForSingleTask(activeTask, taskNumber) {
+    colorTaskType(activeTask.taskType, taskNumber);
+    addTaskTitle(activeTask.headline, taskNumber);
+    addTaskTxt(activeTask.description, taskNumber);
+    subTaskBarProgress(activeTask.doneSubTasks, activeTask.subTaskTotal, taskNumber);
+    taskMember(activeTask.member, taskNumber);
+    taskUrgency(activeTask.urgency, taskNumber);
+    selectionHTML(activeTask.status, taskNumber);
+}
+
+/**
+ * This function returns the HTML code for a task
+ * 
+ * @param {string} taskNr - to create a uniqe identifier 
+ * @returns - html code
+ */
+function taskTemplate(taskNr) {
+    return /*html*/ `
+    &lt;div id="idTaskId${taskNr}"  role="button" draggable='true' ondragstart="dragStart(${taskNr})" onclick="renderOverlayTask(${taskNr})" class="singleTaskContainer">
+        &lt;div class="d-flex justify-content-between align-item-center">
+            &lt;div id="idTaskType${taskNr}" class="singlTaskType">User Story &lt;/div>
+            &lt;select id="idChangeStatus${taskNr}" onclick="innerClick(event)" onchange="changeStatus(this)" class="changeStatus">
+             &lt;!-- hier kommt das dropdownelement rein -->
+             &lt;/select> 
+        &lt;/div>
+        &lt;div id="idTaskTxts${taskNr}" class="singelTaskTexts">
+            &lt;div id="idTaskHeadline${taskNr}" class="singleTaskHeadline">Headline
+            &lt;/div>
+            &lt;div id="idTaskShortTxt${taskNr}" class="singleTaskTxt">Create a contact form and
+                imprint page...&lt;/div>
+        &lt;/div>
+        &lt;div id="idTaskSubTask${taskNr}" class="TaskSubTask">
+            &lt;div class="SingleTaskSubProgressOuterCon"> 
+                &lt;div id="idSingleTaskSubProgress${taskNr}" class="SingleTaskSubProgress">&lt;/div>
+            &lt;/div>
+            &lt;div id="idSingleTaksCount${taskNr}" class="SingleTaksCount">
+                &lt;span id="idSingleTaksCountPart${taskNr}">1&lt;/span>
+                &lt;span>/&lt;/span>
+                &lt;span id="idSingleTaksCountTotal${taskNr}">2&lt;/span>
+                &lt;span> Subtasks&lt;/span>
+            &lt;/div>
+        &lt;/div>
+        &lt;div id="idSingleTaskMemberPrio${taskNr}" class="SingleTaskMemberPrio">
+            &lt;div id="idSingleTaskMember${taskNr}" class="SingleTaskMember">
+                &lt;!-- hier müssen dann über eine Funktion die Memberplaketten eingefügt werden -->
+            &lt;/div>
+            &lt;div id="idSingleTaskPrio${taskNr}" class="SingleTaskPrio">
+                &lt;img id="idSingleTaskPrioImg${taskNr}" src="../assets/img/prio_urgent.svg" alt="">
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>`
+}
+
+/**
+ * 
+ * @param {string} taskStatus provides the actual status of task
+ * @param {string} taskNr - used to find the specific element id
+ */
+function selectionHTML(taskStatus, taskNr) {
+    const statusArr = ['toDo', 'inProgress', 'awaitFeedback', 'done'];
+    let htmlOptions = `&lt;option value="${taskStatus}">${taskStatus}&lt;/option>`;
+    for (let i = 0; i &lt; statusArr.length; i++) {
+        if (taskStatus !== statusArr[i]) {
+            htmlOptions += `&lt;option value="${statusArr[i]}">${statusArr[i]}&lt;/option>`;
+        }  
+    }
+    document.getElementById('idChangeStatus' + taskNr).innerHTML = htmlOptions;
+}
+
+
+/**
+ * this function returns the background color for the specific task type
+ * 
+ * @param {string} taskType - this is the specific task type
+ * @param {string} taskNr - used to find the specific element id
+ */
+function colorTaskType(taskType, taskNr) {
+    document.getElementById('idTaskType' + taskNr).innerText = taskType;
+    switch (taskType) {
+        case "User Story":
+            document.getElementById('idTaskType' + taskNr).style.backgroundColor = '#0038FF';
+            break;
+        case "Technical Task":
+            document.getElementById('idTaskType' + taskNr).style.backgroundColor = '#1FD7C1';
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * This function adds the Headline of task to the html element
+ * 
+ * @param {string} taskHeadline - text from task title
+ * @param {string} taskNr - used to find the specific element id
+ */
+function addTaskTitle(taskHeadline, taskNr) {
+    document.getElementById('idTaskHeadline' + taskNr).innerText = taskHeadline;
+}
+
+/**
+ * This function adds the limited text to the html code of the task
+ * 
+ * @param {string} taskText - text from task description
+ * @param {string} taskNr - used to find the specific element id
+ */
+function addTaskTxt(taskText, taskNr) {
+    document.getElementById('idTaskShortTxt' + taskNr).innerText = limitTextTo37Char(taskText);
+}
+
+/**
+ * This function retuns string of 37 chars plus '...' if the lenght of the string is graeter than 37 chars
+ * 
+ * @param {string} text - just a text
+ * @returns - text limited to 37 chars plus three dots
+ */
+function limitTextTo37Char(text) {
+    if (text.length &lt;= 37) {
+        return text
+    } else {
+        return text.substring(0, 37) + '...';
+    }
+}
+
+/**
+ * This function changes the progress bar width
+ * 
+ * @param {number} doneSubTasks - count of solved tasks
+ * @param {number} subTaskTotal - count of total tasks
+ * @param {string} taskNr - used to find the specific element id
+ */
+function subTaskBarProgress(doneSubTasks, subTaskTotal, taskNr) {
+    let faktor = 1;
+    document.getElementById('idSingleTaksCountPart' + taskNr).innerText = doneSubTasks;
+    document.getElementById('idSingleTaksCountTotal' + taskNr).innerText = subTaskTotal;
+    if (subTaskTotal != 0) {
+        faktor = doneSubTasks / subTaskTotal;
+        document.getElementById('idSingleTaskSubProgress' + taskNr).style.width = Math.round(128 * faktor) + 'px';
+        
+    } else {
+        document.getElementById('idSingleTaskSubProgress' + taskNr).style.width = 0;
+    }
+}
+
+/**
+ * This function add html container to a container with id 'idSingleTaskMember'
+ * used in renderStatusContainer()
+ * 
+ * @param {array} arrMember - array of full names of all members connected to the task
+ * @param {string} taskNr - used to find the specific element id
+ */
+function taskMember(arrMember, taskNr) {
+    for (let i = 0; i &lt; arrMember.length; i++) {
+        const member = contactJSON.find(contact => contact.name === arrMember[i]);
+        if (member) {
+            const membInitials = member.initials;
+            const memberColor = member.bgColor.slice(1);
+            const memberSingleTask = `&lt;div id="idMemberSingleTask${taskNr}_${i}" class="memberDisk memberBgColor${memberColor}">${membInitials}&lt;/div>`;
+            document.getElementById('idSingleTaskMember' + taskNr).innerHTML += memberSingleTask;
+        }
+    }
+}
+
+/**
+ * This function changes the img urgency belonging to task urgency
+ * 
+ * @param {string} urgency - for low, medium, urgent
+ * @param {string} taskNr - used to find the specific element id
+ */
+function taskUrgency(urgency, taskNr) {
+    switch (urgency) {
+        case 'low':
+            document.getElementById('idSingleTaskPrioImg' + taskNr).src = "../assets/img/prio_low.svg";
+            break;
+        case 'medium':
+            document.getElementById('idSingleTaskPrioImg' + taskNr).src = "../assets/img/prio_medium.svg";
+            break;
+        case 'urgent':
+            document.getElementById('idSingleTaskPrioImg' + taskNr).src = "../assets/img/prio_urgent.svg";
+            break;
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addContactOverlayTemplate">addContactOverlayTemplate</a></li><li><a href="global.html#addContactViaEditOverlay">addContactViaEditOverlay</a></li><li><a href="global.html#addDataEditTaskOverlay">addDataEditTaskOverlay</a></li><li><a href="global.html#addDataSingleTaskOverlay">addDataSingleTaskOverlay</a></li><li><a href="global.html#addGreetingPhrase">addGreetingPhrase</a></li><li><a href="global.html#addNewUser">addNewUser</a></li><li><a href="global.html#addNumToSummary">addNumToSummary</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addTaskTitle">addTaskTitle</a></li><li><a href="global.html#addTaskTxt">addTaskTxt</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#addValuesToSummary">addValuesToSummary</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#arePasswordsMatching">arePasswordsMatching</a></li><li><a href="global.html#buildDateFormat">buildDateFormat</a></li><li><a href="global.html#calcTaskId">calcTaskId</a></li><li><a href="global.html#callAddContact">callAddContact</a></li><li><a href="global.html#callFunctionForSingleTask">callFunctionForSingleTask</a></li><li><a href="global.html#changeStatus">changeStatus</a></li><li><a href="global.html#checkExistingUser">checkExistingUser</a></li><li><a href="global.html#checkUncheckSubtask">checkUncheckSubtask</a></li><li><a href="global.html#clearAddTaskForm">clearAddTaskForm</a></li><li><a href="global.html#clearContainer">clearContainer</a></li><li><a href="global.html#clearRegistrationForm">clearRegistrationForm</a></li><li><a href="global.html#closeAddContactOverlay">closeAddContactOverlay</a></li><li><a href="global.html#closeAddTaskOv">closeAddTaskOv</a></li><li><a href="global.html#closeOvelayAfterNewContact">closeOvelayAfterNewContact</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#colorTaskType">colorTaskType</a></li><li><a href="global.html#confirmSendMail">confirmSendMail</a></li><li><a href="global.html#countTasks">countTasks</a></li><li><a href="global.html#createContactList">createContactList</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#deleteTaskCancel">deleteTaskCancel</a></li><li><a href="global.html#deleteTaskConfirm">deleteTaskConfirm</a></li><li><a href="global.html#displayAndHideMessage">displayAndHideMessage</a></li><li><a href="global.html#displayErrorMessage">displayErrorMessage</a></li><li><a href="global.html#displayNewContact">displayNewContact</a></li><li><a href="global.html#displayPasswordMismatchErrorMessage">displayPasswordMismatchErrorMessage</a></li><li><a href="global.html#displaySendPasswordMessageAndRedirect">displaySendPasswordMessageAndRedirect</a></li><li><a href="global.html#displaySuccessMessageAndRedirect">displaySuccessMessageAndRedirect</a></li><li><a href="global.html#displayUserMessageOrRedirect">displayUserMessageOrRedirect</a></li><li><a href="global.html#displayUserNotFoundErrorMessage">displayUserNotFoundErrorMessage</a></li><li><a href="global.html#displayUserNotFoundMessage">displayUserNotFoundMessage</a></li><li><a href="global.html#displayUserNotFoundMessageForEmail">displayUserNotFoundMessageForEmail</a></li><li><a href="global.html#doNotCloseOverlay">doNotCloseOverlay</a></li><li><a href="global.html#dragStart">dragStart</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editContactOverlayTemplate">editContactOverlayTemplate</a></li><li><a href="global.html#editDeletOverlay">editDeletOverlay</a></li><li><a href="global.html#editDelteContactDektop">editDelteContactDektop</a></li><li><a href="global.html#editSubtask">editSubtask</a></li><li><a href="global.html#editSubtaskText">editSubtaskText</a></li><li><a href="global.html#editTaskLoadValues">editTaskLoadValues</a></li><li><a href="global.html#findUserByEmail">findUserByEmail</a></li><li><a href="global.html#findUserByEmailAndPassword">findUserByEmailAndPassword</a></li><li><a href="global.html#generateHTMLifNotUserDesktop">generateHTMLifNotUserDesktop</a></li><li><a href="global.html#generateHTMLifNotUserMobile">generateHTMLifNotUserMobile</a></li><li><a href="global.html#getContactsValues">getContactsValues</a></li><li><a href="global.html#getContactsValuesEditOVerlay">getContactsValuesEditOVerlay</a></li><li><a href="global.html#getEmailFromURLParams">getEmailFromURLParams</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getSubtaskFromForm">getSubtaskFromForm</a></li><li><a href="global.html#getValuesForTaskArr">getValuesForTaskArr</a></li><li><a href="global.html#getValuesFromForm">getValuesFromForm</a></li><li><a href="global.html#greetingText">greetingText</a></li><li><a href="global.html#handleCheckboxNotChecked">handleCheckboxNotChecked</a></li><li><a href="global.html#handleExistingUser">handleExistingUser</a></li><li><a href="global.html#handleExistingUserDesktop">handleExistingUserDesktop</a></li><li><a href="global.html#handleExistingUserMobile">handleExistingUserMobile</a></li><li><a href="global.html#handleFailureResponse">handleFailureResponse</a></li><li><a href="global.html#handleMissingName">handleMissingName</a></li><li><a href="global.html#handleMissingNameDesktop">handleMissingNameDesktop</a></li><li><a href="global.html#handleMissingNameMobile">handleMissingNameMobile</a></li><li><a href="global.html#handlePasswordMismatch">handlePasswordMismatch</a></li><li><a href="global.html#handleResponse">handleResponse</a></li><li><a href="global.html#handleResponseDesktop">handleResponseDesktop</a></li><li><a href="global.html#handleResponseMobile">handleResponseMobile</a></li><li><a href="global.html#handleSignUpButtonClick">handleSignUpButtonClick</a></li><li><a href="global.html#handleSuccessResponse">handleSuccessResponse</a></li><li><a href="global.html#hideContactAddedOverlay">hideContactAddedOverlay</a></li><li><a href="global.html#hideContactInfo">hideContactInfo</a></li><li><a href="global.html#hideContactInfoDektop">hideContactInfoDektop</a></li><li><a href="global.html#hideEditDeletOverlay">hideEditDeletOverlay</a></li><li><a href="global.html#hidePopup">hidePopup</a></li><li><a href="global.html#highlight">highlight</a></li><li><a href="global.html#includeHTML">includeHTML</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAnimation">initAnimation</a></li><li><a href="global.html#initAnimationResponsiv">initAnimationResponsiv</a></li><li><a href="global.html#initials">initials</a></li><li><a href="global.html#innerClick">innerClick</a></li><li><a href="global.html#limitTextTo37Char">limitTextTo37Char</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadContatsToAssinged">loadContatsToAssinged</a></li><li><a href="global.html#loadJSON">loadJSON</a></li><li><a href="global.html#loadUsers">loadUsers</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#memberInitials">memberInitials</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#openAddContactOverlay">openAddContactOverlay</a></li><li><a href="global.html#openAddtaskOverlay">openAddtaskOverlay</a></li><li><a href="global.html#openBoardPage">openBoardPage</a></li><li><a href="global.html#overlayAddButtonDivTemplate">overlayAddButtonDivTemplate</a></li><li><a href="global.html#overlayEditButtonDiv">overlayEditButtonDiv</a></li><li><a href="global.html#passwordNotMatchDesktop">passwordNotMatchDesktop</a></li><li><a href="global.html#passwordNotMatchMobile">passwordNotMatchMobile</a></li><li><a href="global.html#popUp">popUp</a></li><li><a href="global.html#privacyPolicy">privacyPolicy</a></li><li><a href="global.html#privacyPolicyCheckboxDesktop">privacyPolicyCheckboxDesktop</a></li><li><a href="global.html#privacyPolicyCheckboxMobile">privacyPolicyCheckboxMobile</a></li><li><a href="global.html#processEmailConfirmation">processEmailConfirmation</a></li><li><a href="global.html#redirectToLoginPage">redirectToLoginPage</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#renderAllContainer">renderAllContainer</a></li><li><a href="global.html#renderOverlayTask">renderOverlayTask</a></li><li><a href="global.html#renderStatusContainer">renderStatusContainer</a></li><li><a href="global.html#renderTasks">renderTasks</a></li><li><a href="global.html#resetContactAddedOverlay">resetContactAddedOverlay</a></li><li><a href="global.html#resetContactInfo">resetContactInfo</a></li><li><a href="global.html#resetInputFields">resetInputFields</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#resetPasswordDesktop">resetPasswordDesktop</a></li><li><a href="global.html#resetPasswordMobile">resetPasswordMobile</a></li><li><a href="global.html#resetTask2">resetTask2</a></li><li><a href="global.html#resetUserPassword">resetUserPassword</a></li><li><a href="global.html#resetUserPasswordOrDisplayError">resetUserPasswordOrDisplayError</a></li><li><a href="global.html#saveNewUserInContacts">saveNewUserInContacts</a></li><li><a href="global.html#searchFunction">searchFunction</a></li><li><a href="global.html#searchTask">searchTask</a></li><li><a href="global.html#selectionHTML">selectionHTML</a></li><li><a href="global.html#sendPasswordDesktop">sendPasswordDesktop</a></li><li><a href="global.html#sendPasswordMobile">sendPasswordMobile</a></li><li><a href="global.html#setAddContactOVerlay">setAddContactOVerlay</a></li><li><a href="global.html#setColor">setColor</a></li><li><a href="global.html#setContactInfo">setContactInfo</a></li><li><a href="global.html#setEditContactOVerlay">setEditContactOVerlay</a></li><li><a href="global.html#setEditDeleteDivDesktop">setEditDeleteDivDesktop</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setNewUser">setNewUser</a></li><li><a href="global.html#showAndHideContactAddedOverlay">showAndHideContactAddedOverlay</a></li><li><a href="global.html#showContactAddedOverlay">showContactAddedOverlay</a></li><li><a href="global.html#showContactInfo">showContactInfo</a></li><li><a href="global.html#showEditDeletOverlay">showEditDeletOverlay</a></li><li><a href="global.html#showPopup">showPopup</a></li><li><a href="global.html#showUserNames">showUserNames</a></li><li><a href="global.html#singleTaskOvHtmlTemp">singleTaskOvHtmlTemp</a></li><li><a href="global.html#storeNewTask">storeNewTask</a></li><li><a href="global.html#subTaskBarProgress">subTaskBarProgress</a></li><li><a href="global.html#switchIons">switchIons</a></li><li><a href="global.html#taskMember">taskMember</a></li><li><a href="global.html#taskOverlayDate">taskOverlayDate</a></li><li><a href="global.html#taskOverlayMember">taskOverlayMember</a></li><li><a href="global.html#taskOverlayMemberContainer">taskOverlayMemberContainer</a></li><li><a href="global.html#taskOverlayMemberDiskContainer">taskOverlayMemberDiskContainer</a></li><li><a href="global.html#taskOverlayMemberDiskHTML">taskOverlayMemberDiskHTML</a></li><li><a href="global.html#taskOverlayMemberHTML">taskOverlayMemberHTML</a></li><li><a href="global.html#taskOverlayPrio">taskOverlayPrio</a></li><li><a href="global.html#taskOverlaySubTaskContainer">taskOverlaySubTaskContainer</a></li><li><a href="global.html#taskOverlaySubTaskHTML">taskOverlaySubTaskHTML</a></li><li><a href="global.html#taskOverlaySubTasks">taskOverlaySubTasks</a></li><li><a href="global.html#taskTemplate">taskTemplate</a></li><li><a href="global.html#taskUrgency">taskUrgency</a></li><li><a href="global.html#toggleChkBox">toggleChkBox</a></li><li><a href="global.html#toggleDefaultContainer">toggleDefaultContainer</a></li><li><a href="global.html#toggleDivUsrDropVsMemberDisk">toggleDivUsrDropVsMemberDisk</a></li><li><a href="global.html#togglePopupBar">togglePopupBar</a></li><li><a href="global.html#toggleSignUpButton">toggleSignUpButton</a></li><li><a href="global.html#toggleselectedAssignTo">toggleselectedAssignTo</a></li><li><a href="global.html#upcommingDeadline">upcommingDeadline</a></li><li><a href="global.html#validateFullName">validateFullName</a></li><li><a href="global.html#validatePasswordMatch">validatePasswordMatch</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Sep 11 2023 15:53:18 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
