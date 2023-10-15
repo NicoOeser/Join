@@ -237,7 +237,6 @@ async function loadContacts(desk) {
     for (let i = 0; i < contactJSON.length; i++) {
         document.getElementById('idCheckboxesSelectMultUser' + desk).innerHTML += userOvHTML(contactJSON[i].name, contactJSON[i].bgColor.slice(1), contactJSON[i].initials, i)
     }
-    document.getElementById('idChkSelectMultUserOuterCon' + desk).innerHTML += userOvHTMLButton();
 }
 
 /**

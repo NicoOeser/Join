@@ -101,29 +101,18 @@ function htmlAddTaskOverlay() {
                     <div id="idRenderedSubtaskContainerAddTaskOv">
                         <ul id="idRenderedSubtaskAddTaskOv"></ul>
                     </div>
-                </div>
-            </div>
-            <div id="idSubmitContainerAddTaskOv" onsubmit="storeNewTask(true)"
+                    <div id="idSubmitContainerAddTaskOv" onsubmit="storeNewTask(true)"
                 class="submitContainerAddTaskOv d-flex justify-content-end align-items-center">
                 <button id="idSubmitButtonAddTaskOv" type="submit" class="taskButton">Create Task <img
                         src="../assets/img/check.svg"></button>
             </div>
+                </div>
+            </div>
+
         </form>    
     </section>`
 }
 
-
-function userOvHTMLButton() {
-    return /*html*/`
-    <div id="idChkSelectMultUserButtonOv" class="d-flex  ">
-        <button class="flex-fill justify-content-center taskButton" onclick="callAddContact()">
-            <div>
-                <span>Add new cotact</span>
-                <img src="" alt="">
-            </div>
-        </button>
-    </div>`
-}
 
 
 function userOvHTML(memberName, memberColor, memberinitials, i) {
