@@ -7,10 +7,10 @@ a {
 
 /* Header start*/
 header {
-    box-shadow: 0px 4px 4px 0px #0000001A;
-    
+    box-shadow: 0px 4px 4px 1px #0000001A;
 }
-.headerContainer{
+
+.headerContainer {
     height: 80px;
     padding: 20px 16px;
 }
@@ -26,8 +26,9 @@ header {
     color: rgb(41, 171, 226);
     text-decoration: none;
 }
-.headCircle:hover{
- background-color: #e2e5e2;
+
+.headCircle:hover {
+    background-color: #e2e5e2;
 }
 
 .headImg {
@@ -46,8 +47,9 @@ header {
 .iconHelp {
     display: none;
 }
-.headHelpImg:hover{
- width: 21px;
+
+.headHelpImg:hover {
+    width: 21px;
 }
 
 
@@ -85,25 +87,25 @@ header {
 
 
 
-#popupBar{
+#popupBar {
     position: absolute;
     top: 96px;
     right: 40px;
     width: 150px;
     height: 158px !important;
     border-radius: 20px 0 20px 20px;
-    box-shadow: 0 0 4px ;
+    box-shadow: 0 0 4px;
     background-color: #2A3647;
     color: #CDCDCD;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;    
+    justify-content: center;
     font-family: "Inter";
     gap: 12px;
 }
 
-#popupBar a{
+#popupBar a {
     text-decoration: none;
     color: #CDCDCD;
     font-size: 16px;
@@ -135,7 +137,7 @@ header {
     border-radius: 16px;
 }
 
-.footerElement:hover{
+.footerElement:hover {
     background-color: #091931;
 }
 
@@ -159,7 +161,7 @@ header {
     height: 46px;
 }
 
-.footerElementDesktop:hover{
+.footerElementDesktop:hover {
     cursor: pointer;
     background-color: #091931;
 }
@@ -172,24 +174,21 @@ header {
 
 
 .colorGrey {
-    color: #CDCDCD; 
+    color: #CDCDCD;
     text-decoration: none;
-    transition: color 0.3s; 
+    transition: color 0.3s;
 }
 
 .colorGrey:hover {
-    color: #29abe2; 
+    color: #29abe2;
 }
 
 @media (min-width: 750px) {
     #idBackgroundContainer {
-        /* neu */
         display: flex;
-        /* neu */
         flex-direction: row-reverse;
-        /* neu */
         justify-content: flex-end;
-        /* max-width: 1440px; */
+
     }
 
     #idHeaderBody {
@@ -201,16 +200,10 @@ header {
         flex-direction: column;
         background-color: #2A3647;
         color: white;
-        
+
 
         position: inherit;
-        /* neu */
         height: 100vh;
-        /* neu */
-        /*  position: fixed; 
-        left: 0;
-        top: 0;
-        bottom: 0; */
         width: 200px;
         justify-content: space-around;
         align-items: center;

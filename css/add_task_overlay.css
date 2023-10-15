@@ -234,10 +234,6 @@ body {
     display: block;
 }
 
-.checkboxesSelectMultUserOv label:hover {
-    background-color: #1e90ff;
-}
-
 .chkContainerAssingdTo {
     display: flex;
     flex-direction: row-reverse;
@@ -263,10 +259,12 @@ body {
 .hoverAssingedTo:hover {
     background-color: #2A3647;
     color: #dadada;
+    cursor: pointer;
 }
 
 .hoverAssingedTo:hover .check_box+label {
     filter: invert(88%) sepia(68%) saturate(2%) hue-rotate(247deg) brightness(105%) contrast(71%);
+    cursor: pointer;
 }
 
 .AssingedToChecked {

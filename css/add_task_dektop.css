@@ -23,7 +23,6 @@
     .ContentDeskContainerAddTask{
         max-width: 440px;
         width: 45%;
-        max-height: 424px;
         overflow-y: auto;
     }
     .assingToDesk{
@@ -99,7 +98,4 @@
         width: 991px;
     }
 
-    .submitContainerAddTaskOv {
-        width: 991px;
-    }
 }

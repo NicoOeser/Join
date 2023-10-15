@@ -112,6 +112,10 @@
     height: 47px;
 }
 
+.contactsContent {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 4px 0px; /* Fügen Sie den Box-Schatten hinzu */
+}
+
 .createContactOverlay {
     position: fixed;
     bottom: -100%;
@@ -303,7 +307,6 @@
 }
 
 .contacts-container {
-    background-color: #ffffff;
     padding: 20px;
     overflow-y: auto;
     height: calc(100vh - 140px);
@@ -365,7 +368,6 @@
 .rightDivRes {
     width: 100%;
     height: 100%;
-    background: #f6f7f8;
     position: absolute;
 }
 

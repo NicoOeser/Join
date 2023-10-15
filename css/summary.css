@@ -30,7 +30,7 @@
 }
 
 .taskOverviewSize {
-    height: calc(100vh - 340px);
+    height: calc(98vh - 340px);
     overflow-y: auto;
 }
 
@@ -83,8 +83,8 @@
 
 .taskRestOvWidth {
     width: 175px;
-    /* background-color: #29ABE2 !important; */
 }
+
 #idPencilImg{
     width: 40px;
     height: 40px;
