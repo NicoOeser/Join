@@ -262,14 +262,16 @@ function clearAddTaskForm() {
 }
 
 /**
- * This function opens the add task overlay
+ * This function opens the add task overlay and sets the section attribute
  */
-async function openAddtaskOverlay(taskStat) {
+async function openAddtaskOverlay(taskStat, section) {
     resetTask2();
     htmlAddTaskOverlay();
     taskStatus = taskStat;
     await loadContatsToAssinged(true);
-    document.getElementById("idBgAddTaskOverlay").classList.toggle('bgAddTaskOvSlide');
+    const overlay = document.getElementById("idBgAddTaskOverlay");
+    overlay.classList.toggle('bgAddTaskOvSlide');
+    overlay.setAttribute('data-section', section); // Fügen Sie das Abschnittsargument hinzu
 }
 
 /**
