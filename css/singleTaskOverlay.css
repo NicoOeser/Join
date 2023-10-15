@@ -76,6 +76,10 @@
     gap: 10px;
 }
 
+.singleTaskSubTaskSubContainerOV label, .singleTaskSubTaskSubContainerOV .check_box {
+    cursor: pointer;
+}
+
 .singleTaskMemberContainerOV {
     margin-top: 8px;
     max-height: 112px;
@@ -111,15 +115,17 @@
     gap: 4px;
     max-height: 64px;
     overflow-y: auto;
+    cursor: pointer;
 }
 
 .singleTaskSubTaskSubContainerOV {
     display: flex;
     padding: 6px 16px;
     gap: 16px;
+
 }
 .singleTaskSubTaskSubContainerOV:hover {
-    background-color: #5e626975;
+    background-color: #1455c575;
 }
 
 .check_box {

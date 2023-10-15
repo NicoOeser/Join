@@ -23,7 +23,6 @@
 </head>
 
 <body onload="loadContacts()">
-    <!-- die IDs bekommen das Format Ov statt einer Nummer. Grund, damit kann ich alle Singletask funktionen nutzen -->
     <form id="idAddTaskForm" onsubmit="storeNewTask();return false" class="addTaskOvGeneralSettings">
 
         <h1 id="idHeadlineAddTask" class="headlineAddTaskOv">Add Task</h1>
@@ -83,10 +82,9 @@
                     <input type="search" id="idInputAssignedToAddTaskOv" class="selectContainerOv selectArrow"
                         placeholder="Select contacts to assign">
                 </div>
-                <div id="idSelectedUserAddTaskOv"><!-- hier kommen die User rein, die ausgewählt wurden --></div>
+                <div id="idSelectedUserAddTaskOv"></div>
                 <div id="idChkSelectMultUserOuterConOv" class="chkSelectMultUserOuterConOv">
                     <div id="idCheckboxesSelectMultUserOv" class="checkboxesSelectMultUserOv">
-                        <!-- hier kommt die Funktion rein, die die Namen aus contactJSON ausliest -->
                         <div>
                             <label for="one">First checkbox</label>
                             <input type="checkbox" id="one">
@@ -110,7 +108,7 @@
                     <input id="idSubtaskAddTaskOv" onfocus="switchIons(1)" 
                         class="subtaskAddTaskOv" type="text" placeholder="Add new subtask">
                     <div id="idSwitchIcons">
-                        <img id="idSubtaskPlus" src="../assets/img/plus.svg" onclick="switchIons(2)"> <!-- onclick="switchIons(4)" -->
+                        <img id="idSubtaskPlus" src="../assets/img/plus.svg" onclick="switchIons(2)">
                         <div id="idSubtaskIconContainer" class="d-flex flex-row d-none">
                             <img src="../assets/img/taskOverlayClose.svg" alt="" onclick="switchIons(4)">
                             <div id="idSubTaskDivider" class="subTaskDivider"></div>
@@ -131,7 +129,6 @@
         </div>
 
     </form>
-    <!-- das einfliegen lassen? -->
     <div id="idTaskAddedConfimationAddTaskOv" class="taskButton">
         <span>Task added to board</span>
         <img src="../assets/img/task_added_to_board.svg">
